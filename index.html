@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="ru"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Каталог растений&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Telegram WebApp SDK --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://telegram.org/js/telegram-web-app.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--bg-color: var(--tg-theme-bg-color, #f5f5f7);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--card-bg: var(--tg-theme-secondary-bg-color, #ffffff);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--text-color: var(--tg-theme-text-color, #222222);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--hint-color: var(--tg-theme-hint-color, #8e8e93);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--button-color: var(--tg-theme-button-color, #2e7d32);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--button-text: var(--tg-theme-button-text-color, #ffffff);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: var(--bg-color);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: var(--text-color);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-sizing: border-box;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>h1 {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 8px 4px 16px 4px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gap: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.grid {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gap: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding-bottom: 80px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: var(--card-bg);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 2px 8px rgba(0,0,0,0.04);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card img {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>height: 130px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>object-fit: cover;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #eee;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.title {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 8px 0 4px 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>line-height: 1.2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.price {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: var(--button-color);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-top: auto;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: var(--button-color);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: var(--button-text);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 13px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn.added {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #e0e0e0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #555;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;🌱 Каталог растений&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="grid" id="catalog"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const tg = window.Telegram.WebApp;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>tg.expand(); // Разворачиваем на весь экран</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Ваш список растений</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const products = [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: 1, name: "👑 Алоказия Cucullata", price: 1200, img: "https://via.placeholder.com/300?text=Cucullata" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: 2, name: "🐉 Алоказия Dragon Scale", price: 1500, img: "https://via.placeholder.com/300?text=Dragon+Scale" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: 3, name: "🦎 Алоказия Jacklyn", price: 1800, img: "https://via.placeholder.com/300?text=Jacklyn" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: 4, name: "🌿 Монстера Classic", price: 1000, img: "https://via.placeholder.com/300?text=Monstera" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: 5, name: "🍓 Каладиум Strawberry Star", price: 900, img: "https://via.placeholder.com/300?text=Strawberry+Star" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: 6, name: "🌙 Каладиум Moonlight", price: 850, img: "https://via.placeholder.com/300?text=Moonlight" }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let cart = {};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Отрисовка каталога</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const catalog = document.getElementById('catalog');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>products.forEach(p =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const card = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>card.className = 'card';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>card.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;img src="${p.img}" alt="${p.name}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="title"&gt;${p.name}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="price"&gt;${p.price} ₽&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn" id="btn-${p.id}" onclick="toggleCart(${p.id})"&gt;В корзину&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>catalog.appendChild(card);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Управление корзиной</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function toggleCart(id) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const btn = document.getElementById(`btn-${id}`);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (cart[id]) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>delete cart[id];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>btn.textContent = 'В корзину';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>btn.classList.remove('added');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>cart[id] = 1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>btn.textContent = '✓ В корзине';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>btn.classList.add('added');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>updateMainButton();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Главная нижняя кнопка Telegram</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function updateMainButton() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const count = Object.keys(cart).length;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (count &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let total = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>Object.keys(cart).forEach(id =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>const item = products.find(p =&gt; p.id == id);</p>
+<p class="p1"><span class="Apple-converted-space">          </span>total += item.price;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>tg.MainButton.setText(`Оформить заказ (${total} ₽)`);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>tg.MainButton.show();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>tg.MainButton.hide();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Отправка заказа в бот</p>
+<p class="p1"><span class="Apple-converted-space">    </span>tg.MainButton.onClick(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let orderItems = [];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>Object.keys(cart).forEach(id =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const item = products.find(p =&gt; p.id == id);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>orderItems.push(item.name);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>});</p>
+<p class="p2"><span class="Apple-converted-space">      </span></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const data = {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>order: orderItems.join(", ")</p>
+<p class="p1"><span class="Apple-converted-space">      </span>};</p>
+<p class="p2"><span class="Apple-converted-space">      </span></p>
+<p class="p1"><span class="Apple-converted-space">      </span>tg.sendData(JSON.stringify(data));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>tg.close();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
