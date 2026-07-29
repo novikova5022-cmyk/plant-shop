@@ -11,8 +11,9 @@
       --card-bg: var(--tg-theme-secondary-bg-color, #ffffff);
       --text-color: var(--tg-theme-text-color, #222222);
       --hint-color: var(--tg-theme-hint-color, #8e8e93);
-      --button-color: var(--tg-theme-button-color, #2e7d32);
-      --button-text: var(--tg-theme-button-text-color, #ffffff);
+      /* Жестко фиксируем фирменный зеленый цвет Botanika, игнорируя розовую тему тг */
+      --button-color: #2e7d32;
+      --button-text: #ffffff;
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -68,12 +69,13 @@
       font-weight: 600;
     }
 
+    /* Виджет совета/аффирмации для корзины */
     .daily-card {
       background: linear-gradient(135deg, rgba(46,125,50,0.08), rgba(46,125,50,0.01));
       border: 1px solid rgba(46,125,50,0.15);
       border-radius: 12px;
       padding: 10px 12px;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -156,7 +158,6 @@
       border-color: var(--button-color);
     }
 
-    /* Стильная полупрозрачная плашка доверия (в стиле ретро-титров) */
     .trust-ticker {
       background: rgba(0, 0, 0, 0.04);
       border: 1px solid rgba(0, 0, 0, 0.06);
@@ -285,7 +286,6 @@
       margin-bottom: 6px;
     }
     
-    /* Улучшенная, заметная кнопка запроса живого фото */
     .ask-photo-btn {
       display: inline-flex;
       align-items: center;
@@ -415,6 +415,39 @@
       font-size: 14px;
     }
 
+    /* Блок допродаж (Upsell) в корзине */
+    .upsell-section {
+      margin-top: 15px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .upsell-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--button-color);
+      margin-bottom: 8px;
+    }
+    .upsell-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      padding: 6px 0;
+      border-top: 1px solid rgba(0,0,0,0.04);
+    }
+    .upsell-add-btn {
+      background: rgba(46,125,50,0.1);
+      color: var(--button-color);
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
     .promo-box {
       margin-top: 15px;
       display: flex;
@@ -505,11 +538,11 @@
 </head>
 <body>
 
-  <!-- Профессиональная единая шапка -->
+  <!-- Шапка: Каталог / Важное (переименовано) + Настройки -->
   <div class="top-bar">
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchTab('catalog')" id="tabCatalog">🌱 Catalog</button>
-      <button class="tab-btn" onclick="switchTab('info')" id="tabInfo">ℹ️ About Us</button>
+      <button class="tab-btn" onclick="switchTab('info')" id="tabInfo">ℹ️ Важное</button>
     </div>
     <div class="settings-group">
       <select id="currencySelect" class="select-pill" onchange="renderCatalog()">
@@ -527,13 +560,6 @@
 
   <!-- СТРАНИЦА КАТАЛОГА -->
   <div id="catalog-page">
-    <div class="daily-card">
-      <div class="daily-text" id="dailyWidgetText">
-        🌿 <b>Tip of the day:</b> Alocasia Azlanii loves high humidity and ambient light without direct sun.
-      </div>
-      <button class="daily-refresh-btn" onclick="refreshDailyCard()" id="btnNewTip">✨ New tip</button>
-    </div>
-    
     <div class="toolbar">
       <input type="text" id="searchInput" class="search-box" placeholder="Search plants..." oninput="renderCatalog()">
       <select id="sortSelect" class="sort-select" onchange="renderCatalog()">
@@ -555,7 +581,6 @@
       <button class="filter-btn" onclick="setCategory('Bulb', this)" id="btnBulb">🪵 Bulbs</button>
     </div>
 
-    <!-- Полупрозрачная статичная плашка гарантий под фильтрами -->
     <div class="trust-ticker" id="trustTickerText">
       <span>📍 Rustaveli Pickup</span>
       <span>•</span>
@@ -567,7 +592,7 @@
     <div class="grid" id="catalog"></div>
   </div>
 
-  <!-- СТРАНИЦА ИНФО И "О НАС" -->
+  <!-- СТРАНИЦА ВАЖНОЕ (бывш. About Us) -->
   <div id="info-page" style="display: none;">
     <div class="info-card">
       <h3 id="infoTitleExpert">👑 About Nika & Botanika</h3>
@@ -593,14 +618,36 @@
     </div>
   </div>
 
-  <!-- СТРАНИЦА КОРЗИНЫ -->
+  <!-- СТРАНИЦА КОРЗИНЫ (с перенесенным виджетом совета и допродажами) -->
   <div id="cart-page" style="display: none;">
     <div class="cart-header">
       <h1 id="lblCartTitle" style="font-size:18px; margin:0;">🛒 Your Cart</h1>
       <button class="clear-cart-btn" onclick="clearCart()" id="btnClear">Clear Cart</button>
     </div>
+
+    <!-- Виджет Совет дня переехал сюда -->
+    <div class="daily-card">
+      <div class="daily-text" id="dailyWidgetText">
+        🌿 <b>Tip of the day:</b> Alocasia Azlanii loves high humidity and ambient light without direct sun.
+      </div>
+      <button class="daily-refresh-btn" onclick="refreshDailyCard()" id="btnNewTip">✨ New tip</button>
+    </div>
+
     <div id="cart-items"></div>
     
+    <!-- Блок допродаж (Cross-sell для увеличения чека) -->
+    <div class="upsell-section">
+      <div class="upsell-title" id="upsellTitle">💡 Recommended for your plants:</div>
+      <div class="upsell-item">
+        <span>🌱 Premium Aroid Soil Mix (1L) — <b>10 ₾</b></span>
+        <button class="upsell-add-btn" onclick="addUpsell('Premium Aroid Soil Mix', 10)">+ Add</button>
+      </div>
+      <div class="upsell-item" style="border-top: 1px solid rgba(0,0,0,0.04); padding-top: 6px; margin-top: 6px;">
+        <span>🦠 Fresh Sphagnum Moss (Pack) — <b>7 ₾</b></span>
+        <button class="upsell-add-btn" onclick="addUpsell('Sphagnum Moss Pack', 7)">+ Add</button>
+      </div>
+    </div>
+
     <div class="promo-box">
       <input type="text" id="promoInput" class="promo-input" placeholder="Promo code...">
       <button class="promo-btn" onclick="applyPromo()" id="btnApply">Apply</button>
@@ -643,7 +690,7 @@
     const translations = {
       en: {
         tabCatalog: "🌱 Catalog",
-        tabInfo: "ℹ️ About Us",
+        tabInfo: "ℹ️ Важное",
         search: "Search plants...",
         all: "🌱 All",
         saved: "⭐ Saved",
@@ -660,6 +707,7 @@
         addToCart: "Add to cart",
         cartTitle: "🛒 Your Cart",
         clearCart: "Clear Cart",
+        upsellTitle: "💡 Recommended for your plants:",
         promoPlaceholder: "Promo code...",
         apply: "Apply",
         back: "← Back to Catalog",
@@ -679,7 +727,7 @@
       },
       ru: {
         tabCatalog: "🌱 Каталог",
-        tabInfo: "ℹ️ О нас",
+        tabInfo: "ℹ️ Важное",
         search: "Поиск растений...",
         all: "🌱 Все",
         saved: "⭐ Избранное",
@@ -696,6 +744,7 @@
         addToCart: "В корзину",
         cartTitle: "🛒 Ваша корзина",
         clearCart: "Очистить",
+        upsellTitle: "💡 Рекомендуем для ухода:",
         promoPlaceholder: "Промокод...",
         apply: "Применить",
         back: "← Назад в каталог",
@@ -705,7 +754,7 @@
         emptyCart: "Корзина пуста",
         toastAdded: "Добавлено",
         toastCleared: "Корзина очищена",
-        promoApplied: "Promo code applied!",
+        promoApplied: "Промокод применен!",
         infoExpertTitle: "👑 О Нике и Botanika",
         infoExpertText: "Botanika Tbilisi — это бутик-проект, созданный <b>Никой</b>, известным экспертом и страстным коллекционером редких ароидных. Обладая многолетним опытом, Ника лично отбирает, адаптирует и заботится о каждом растении.",
         infoPickupTitle: "📍 Самовывоз и доставка",
@@ -715,7 +764,7 @@
       },
       uk: {
         tabCatalog: "🌱 Каталог",
-        tabInfo: "ℹ️ Про нас",
+        tabInfo: "ℹ️ Важливе",
         search: "Пошук рослин...",
         all: "🌱 Всі",
         saved: "⭐ Збережені",
@@ -732,6 +781,7 @@
         addToCart: "У кошик",
         cartTitle: "🛒 Ваш кошик",
         clearCart: "Очистити",
+        upsellTitle: "💡 Рекомендуємо для догляду:",
         promoPlaceholder: "Промокод...",
         apply: "Застосувати",
         back: "← Назад до каталогу",
@@ -741,7 +791,7 @@
         emptyCart: "Кошик порожній",
         toastAdded: "Додано",
         toastCleared: "Кошик очищено",
-        promoApplied: "Promo code applied!",
+        promoApplied: "Промокод застосовано!",
         infoExpertTitle: "👑 Про Ніку та Botanika",
         infoExpertText: "Botanika Tbilisi — бутік-проєкт, створений <b>Нікою</b>, відомим експертом та колекціонером рідкісних ароїдних. Маючи багаторічний досвід, Ніка особисто доглядає за кожним екземпляром.",
         infoPickupTitle: "📍 Самовивіз та доставка",
@@ -751,7 +801,7 @@
       },
       ka: {
         tabCatalog: "🌱 კატალოგი",
-        tabInfo: "ℹ️ ჩვენ შესახებ",
+        tabInfo: "ℹ️ მნიშვნელოვანი",
         search: "მცენარეების ძებნა...",
         all: "🌱 ყველა",
         saved: "⭐ რჩეული",
@@ -768,6 +818,7 @@
         addToCart: "კალათაში",
         cartTitle: "🛒 თქვენი კალათა",
         clearCart: "გასუფთავება",
+        upsellTitle: "💡 გირჩევთ მოვლისთვის:",
         promoPlaceholder: "პრომოკოდი...",
         apply: "არჩევა",
         back: "← კატალოგში დაბრუნება",
@@ -777,7 +828,7 @@
         emptyCart: "კალათა ცარიელია",
         toastAdded: "დამატებულია",
         toastCleared: "კალათა გასუფთავდა",
-        promoApplied: "Promo code applied!",
+        promoApplied: "პრომოკოდი გააქტიურდა!",
         infoExpertTitle: "👑 ნიკასა და Botanika-ს შესახებ",
         infoExpertText: "Botanika Tbilisi არის ბუტიკი, რომელიც შექმნა <b>ნიკამ</b> — იშვიათი აროიდების ცნობილმა ექსპერტმა და კოლექციონერმა. მრავალწლიანი გამოცდილებით, ნიკა პირადად ამოწმებს და უვლის თითოეულ მცენარეს.",
         infoPickupTitle: "📍 თვითგატანა და მიწოდება",
@@ -807,6 +858,7 @@
       document.getElementById('trustTickerText').innerHTML = t.trustTicker;
       document.getElementById('lblCartTitle').textContent = t.cartTitle;
       document.getElementById('btnClear').textContent = t.clearCart;
+      document.getElementById('upsellTitle').textContent = t.upsellTitle;
       document.getElementById('promoInput').placeholder = t.promoPlaceholder;
       document.getElementById('btnApply').textContent = t.apply;
       document.getElementById('btnBack').textContent = t.back;
@@ -937,6 +989,23 @@
       }
     }
 
+    // Функция добавления допродажи (грунт, мох) в корзину
+    function addUpsell(name, priceGEL) {
+      // Создаем уникальный виртуальный ID для допродаж
+      const upsellId = 'upsell_' + name;
+      if (!cart[upsellId]) {
+        // Сохраняем во временный массив продуктов, если еще нет
+        if (!products.some(p => p.id === upsellId)) {
+          products.push({ id: upsellId, name: name, price: priceGEL, inStock: true, desc: "Care accessory" });
+        }
+        cart[upsellId] = 0;
+      }
+      cart[upsellId]++;
+      showToast(`Added ${name}`);
+      renderCart();
+      updateMainButton();
+    }
+
     function askPhoto(plantName) {
       const user = tg.initDataUnsafe?.user;
       const username = user && user.username ? `@${user.username}` : (user ? user.first_name : "User");
@@ -985,6 +1054,7 @@
       const t = translations[currentLang];
 
       let filtered = products.filter(p => {
+        if (typeof p.id === 'string' && p.id.startsWith('upsell_')) return false; // Исключаем допродажи из каталога
         let matchesCategory = true;
         if (currentCategory === 'Favorites') {
           matchesCategory = favorites[p.id];
@@ -1062,7 +1132,7 @@
       
       const t = translations[currentLang];
       const item = products.find(p => p.id == id);
-      if (delta > 0) {
+      if (delta > 0 && item) {
         showToast(`${t.toastAdded} ${item.name}`);
       }
 
@@ -1095,6 +1165,7 @@
 
       keys.forEach(id => {
         const item = products.find(p => p.id == id);
+        if (!item) return;
         const qty = cart[id];
         const div = document.createElement('div');
         div.className = 'cart-item';
@@ -1105,9 +1176,9 @@
           </div>
           <div class="cart-item-actions">
             <div class="qty-control" style="width: 90px;">
-              <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+              <button class="qty-btn" onclick="changeQty('${item.id}', -1)">-</button>
               <span class="qty-num">${qty}</span>
-              <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+              <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
             </div>
           </div>
         `;
@@ -1120,7 +1191,8 @@
       let totalPriceGEL = 0;
       Object.keys(cart).forEach(id => {
         totalCount += cart[id];
-        totalPriceGEL += products.find(p => p.id == id).price * cart[id];
+        const item = products.find(p => p.id == id);
+        if (item) totalPriceGEL += item.price * cart[id];
       });
 
       if (totalCount > 0) {
@@ -1147,12 +1219,15 @@
         
         Object.keys(cart).forEach(id => {
           const item = products.find(p => p.id == id);
-          orderText += `• ${item.name} — ${formatPrice(item.price)} × ${cart[id]} = ${formatPrice(item.price * cart[id])}\n`;
+          if (item) {
+            orderText += `• ${item.name} — ${formatPrice(item.price)} × ${cart[id]} = ${formatPrice(item.price * cart[id])}\n`;
+          }
         });
 
         let totalGEL = 0;
         Object.keys(cart).forEach(id => {
-          totalGEL += products.find(p => p.id == id).price * cart[id];
+          const item = products.find(p => p.id == id);
+          if (item) totalGEL += item.price * cart[id];
         });
         orderText += `\n💰 <b>Итого: ${formatPrice(totalGEL)}</b>\n\n`;
 
