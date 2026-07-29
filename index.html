@@ -24,8 +24,49 @@
     }
     h1 {
       font-size: 20px;
-      margin: 8px 4px 16px 4px;
+      margin: 8px 4px 12px 4px;
     }
+    /* Поиск и фильтры */
+    .search-box {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      outline: none;
+    }
+    .filters {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar {
+      display: none;
+    }
+    .filter-btn {
+      background: var(--card-bg);
+      color: var(--text-color);
+      border: 1px solid #ddd;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .filter-btn.active {
+      background: var(--button-color);
+      color: var(--button-text);
+      border-color: var(--button-color);
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -76,9 +117,47 @@
       font-size: 13px;
       text-align: center;
     }
-    .btn.added {
-      background: #e0e0e0;
-      color: #555;
+    
+    /* Контроль количества в карточке */
+    .qty-control {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f0f0f5;
+      border-radius: 8px;
+      padding: 2px;
+    }
+    .qty-btn {
+      background: var(--button-color);
+      color: var(--button-text);
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .qty-num {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Корзина */
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .clear-cart-btn {
+      color: #ff3b30;
+      background: none;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
     }
     .cart-item {
       background: var(--card-bg);
@@ -103,13 +182,10 @@
       color: var(--button-color);
       margin-top: 4px;
     }
-    .cart-remove {
-      color: #ff3b30;
-      font-size: 13px;
-      font-weight: 600;
-      background: none;
-      border: none;
-      cursor: pointer;
+    .cart-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     .empty-cart {
       text-align: center;
@@ -117,103 +193,192 @@
       margin-top: 40px;
       font-size: 15px;
     }
+
+    /* Успешный заказ */
+    .success-screen {
+      text-align: center;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 80vh;
+    }
+    .success-icon {
+      font-size: 50px;
+      margin-bottom: 16px;
+    }
+    .success-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .success-text {
+      font-size: 14px;
+      color: var(--hint-color);
+      line-height: 1.5;
+      margin-bottom: 30px;
+    }
   </style>
 </head>
 <body>
 
+  <!-- СТРАНИЦА 1: КАТАЛОГ -->
   <div id="catalog-page">
     <h1>🌱 Plant Catalog</h1>
+    <input type="text" id="searchInput" class="search-box" placeholder="Search plants..." oninput="filterProducts()">
+    <div class="filters" id="filtersContainer">
+      <button class="filter-btn active" onclick="setCategory('All', this)">All</button>
+      <button class="filter-btn" onclick="setCategory('Alocasia', this)">Alocasia</button>
+      <button class="filter-btn" onclick="setCategory('Caladium', this)">Caladium</button>
+      <button class="filter-btn" onclick="setCategory('Monstera', this)">Monstera</button>
+      <button class="filter-btn" onclick="setCategory('Other', this)">Other</button>
+    </div>
     <div class="grid" id="catalog"></div>
   </div>
 
+  <!-- СТРАНИЦА 2: КОРЗИНА -->
   <div id="cart-page" style="display: none;">
-    <h1>🛒 Your Cart</h1>
+    <div class="cart-header">
+      <h1>🛒 Your Cart</h1>
+      <button class="clear-cart-btn" onclick="clearCart()">Clear Cart</button>
+    </div>
     <div id="cart-items"></div>
     <button class="btn" style="width:100%; margin-top:20px;" onclick="showCatalog()">← Back to Catalog</button>
+  </div>
+
+  <!-- СТРАНИЦА 3: УСПЕШНЫЙ ЗАКАЗ -->
+  <div id="success-page" style="display: none;" class="success-screen">
+    <div class="success-icon">🌿✨</div>
+    <div class="success-title">Thank you for your order!</div>
+    <div class="success-text">Your order has been successfully placed.<br>Pickup in Tbilisi / Delivery details will be discussed in chat.<br><br>Our manager will contact you shortly!</div>
+    <button class="btn" style="width:100%; max-width: 250px;" onclick="tg.close()">Close</button>
   </div>
 
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
 
+    // Список товаров (без меток владельцев)
     const products = [
-      { id: 1, name: "🌿 Monstera Classic", desc: "Healthy rooted plant", price: 40, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 2, name: "🌴 Strelitzia Nicolai", desc: "Beautiful large leaves", price: 65, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
-      { id: 3, name: "🍾 Caladium Brandy", desc: "White Brandy variety", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 4, name: "🍹 Caladium Mint Julep", desc: "Minty fresh leaves", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 5, name: "🎭 Caladium Fantasia", desc: "Stunning colors", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
-      { id: 6, name: "🌙 Caladium Moonlight", desc: "Silvery white foliage", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
-      { id: 7, name: "🍓 Caladium Strawberry Star", desc: "Pink spots on white", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 8, name: "🌸 Caladium Pink Beauty", desc: "Vibrant pink leaves", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 9, name: "♥️ Caladium Ace of Hearts", desc: "Heart-shaped pink center", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
-      { id: 10, name: "🔥 Caladium Wildfire", desc: "Fiery red foliage", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 11, name: "💖 Caladium Sweetheart", desc: "Beautiful pink hues", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
-      { id: 12, name: "💃 Caladium Ballerina", desc: "Elegant structure", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 13, name: "🎼 Caladium Spring Overture", desc: "Fresh spring look", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
-      { id: 14, name: "🦎 Alocasia Jacklyn", desc: "Unique textured leaves", price: 80, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 15, name: "🧪 Alocasia Jacklyn (Baby)", desc: "In a sauce cup", price: 25, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
-      { id: 16, name: "🐉 Alocasia Dragon Scale", desc: "Dragon skin texture", price: 60, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 17, name: "🎀 Alocasia Nobilis Pink", desc: "Rare Korean selection", price: 70, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 18, name: "🌱 Alocasia Bambino (Regular)", desc: "Compact and cute", price: 30, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
-      { id: 19, name: "🐲 Alocasia Pink Dragon", desc: "Pink stems", price: 50, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 20, name: "🧙‍♂️ Alocasia Gnomie", desc: "Dwarf variety", price: 45, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
-      { id: 21, name: "💎 Alocasia Azlanii", desc: "Metallic purple veins", price: 90, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 22, name: "🪵 Alocasia (Bulbs)", desc: "Grow your own", price: 15, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
-      { id: 23, name: "🐭 Xanthosoma Mickey Mouse", desc: "Variegated leaves", price: 55, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
-      { id: 24, name: "📜 Calathea Lancifolia", desc: "Rattlesnake plant", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
-      { id: 25, name: "👑 Alocasia Cucullata", desc: "Hooded elephant ear", price: 40, img: "https://images.unsplash.com/photo-1632832447661-d70a13e2f170?auto=format&fit=crop&w=400&q=80", owner: "Юля" }
+      { id: 1, category: "Monstera", name: "🌿 Monstera Classic", desc: "Healthy rooted plant", price: 40, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 2, category: "Other", name: "🌴 Strelitzia Nicolai", desc: "Beautiful large leaves", price: 65, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 3, category: "Caladium", name: "🍾 Caladium Brandy", desc: "White Brandy variety", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 4, category: "Caladium", name: "🍹 Caladium Mint Julep", desc: "Minty fresh leaves", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 5, category: "Caladium", name: "🎭 Caladium Fantasia", desc: "Stunning colors", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 6, category: "Caladium", name: "🌙 Caladium Moonlight", desc: "Silvery white foliage", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 7, category: "Caladium", name: "🍓 Caladium Strawberry Star", desc: "Pink spots on white", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 8, category: "Caladium", name: "🌸 Caladium Pink Beauty", desc: "Vibrant pink leaves", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 9, category: "Caladium", name: "♥️ Caladium Ace of Hearts", desc: "Heart-shaped pink center", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 10, category: "Caladium", name: "🔥 Caladium Wildfire", desc: "Fiery red foliage", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 11, category: "Caladium", name: "💖 Caladium Sweetheart", desc: "Beautiful pink hues", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 12, category: "Caladium", name: "💃 Caladium Ballerina", desc: "Elegant structure", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 13, category: "Caladium", name: "🎼 Caladium Spring Overture", desc: "Fresh spring look", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 14, category: "Alocasia", name: "🦎 Alocasia Jacklyn", desc: "Unique textured leaves", price: 80, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 15, category: "Alocasia", name: "🧪 Alocasia Jacklyn (Baby)", desc: "In a sauce cup", price: 25, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 16, category: "Alocasia", name: "🐉 Alocasia Dragon Scale", desc: "Dragon skin texture", price: 60, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 17, category: "Alocasia", name: "🎀 Alocasia Nobilis Pink", desc: "Rare Korean selection", price: 70, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 18, category: "Alocasia", name: "🌱 Alocasia Bambino", desc: "Compact and cute", price: 30, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 19, category: "Alocasia", name: "🐲 Alocasia Pink Dragon", desc: "Pink stems", price: 50, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 20, category: "Alocasia", name: "🧙‍♂️ Alocasia Gnomie", desc: "Dwarf variety", price: 45, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 21, category: "Alocasia", name: "💎 Alocasia Azlanii", desc: "Metallic purple veins", price: 90, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 22, category: "Alocasia", name: "🪵 Alocasia (Bulbs)", desc: "Grow your own", price: 15, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 23, category: "Other", name: "🐭 Xanthosoma Mickey Mouse", desc: "Variegated leaves", price: 55, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 24, category: "Other", name: "📜 Calathea Lancifolia", desc: "Rattlesnake plant", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 25, category: "Alocasia", name: "👑 Alocasia Cucullata", desc: "Hooded elephant ear", price: 40, img: "https://images.unsplash.com/photo-1632832447661-d70a13e2f170?auto=format&fit=crop&w=400&q=80" }
     ];
 
-    let cart = {};
+    let cart = {}; // ID товара -> количество
     let currentView = 'catalog';
+    let currentCategory = 'All';
 
     const catalogDiv = document.getElementById('catalog');
     const cartItemsDiv = document.getElementById('cart-items');
     const catalogPage = document.getElementById('catalog-page');
     const cartPage = document.getElementById('cart-page');
+    const successPage = document.getElementById('success-page');
+    const searchInput = document.getElementById('searchInput');
 
-    products.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${p.img}" alt="${p.name}">
-        <div class="title">${p.name}</div>
-        <div class="desc">${p.desc}</div>
-        <div class="price">${p.price} ₾</div>
-        <button class="btn" id="btn-${p.id}" onclick="toggleCart(${p.id})">Add to cart</button>
-      `;
-      catalogDiv.appendChild(card);
-    });
+    // Отрисовка каталога с учетом поиска и фильтров
+    function renderCatalog() {
+      catalogDiv.innerHTML = '';
+      const query = searchInput.value.toLowerCase();
 
-    function toggleCart(id) {
-      const btn = document.getElementById(`btn-${id}`);
-      if (cart[id]) {
+      const filtered = products.filter(p => {
+        const matchesCategory = (currentCategory === 'All' || p.category === currentCategory);
+        const matchesSearch = p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        catalogDiv.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--hint-color); margin-top: 30px;">No plants found</div>';
+        return;
+      }
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        
+        let actionHTML = '';
+        const qty = cart[p.id] || 0;
+
+        if (qty === 0) {
+          actionHTML = `<button class="btn" onclick="changeQty(${p.id}, 1)">Add to cart</button>`;
+        } else {
+          actionHTML = `
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(${p.id}, -1)">-</button>
+              <span class="qty-num">${qty}</span>
+              <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <img src="${p.img}" alt="${p.name}">
+          <div class="title">${p.name}</div>
+          <div class="desc">${p.desc}</div>
+          <div class="price">${p.price} ₾</div>
+          ${actionHTML}
+        `;
+        catalogDiv.appendChild(card);
+      });
+    }
+
+    function setCategory(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCatalog();
+    }
+
+    function filterProducts() {
+      renderCatalog();
+    }
+
+    // Изменение количества товара
+    function changeQty(id, delta) {
+      if (!cart[id]) cart[id] = 0;
+      cart[id] += delta;
+      if (cart[id] <= 0) {
         delete cart[id];
-        btn.textContent = 'Add to cart';
-        btn.classList.remove('added');
-      } else {
-        cart[id] = 1;
-        btn.textContent = '✓ In cart';
-        btn.classList.add('added');
+      }
+      renderCatalog();
+      if (currentView === 'cart') {
+        renderCart();
       }
       updateMainButton();
     }
 
-    function removeFromCart(id) {
-      delete cart[id];
-      const btn = document.getElementById(`btn-${id}`);
-      if (btn) {
-        btn.textContent = 'Add to cart';
-        btn.classList.remove('added');
-      }
+    function clearCart() {
+      cart = {};
+      renderCatalog();
       renderCart();
       updateMainButton();
-      
-      if (Object.keys(cart).length === 0) {
-        showCatalog();
-      }
+      showCatalog();
     }
 
+    // Отрисовка корзины
     function renderCart() {
       cartItemsDiv.innerHTML = '';
       const keys = Object.keys(cart);
@@ -225,14 +390,21 @@
 
       keys.forEach(id => {
         const item = products.find(p => p.id == id);
+        const qty = cart[id];
         const div = document.createElement('div');
         div.className = 'cart-item';
         div.innerHTML = `
           <div class="cart-item-info">
             <span class="cart-item-title">${item.name}</span>
-            <span class="cart-item-price">${item.price} ₾</span>
+            <span class="cart-item-price">${item.price} ₾ × ${qty} = ${item.price * qty} ₾</span>
           </div>
-          <button class="cart-remove" onclick="removeFromCart(${item.id})">Remove</button>
+          <div class="cart-item-actions">
+            <div class="qty-control" style="width: 90px;">
+              <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+              <span class="qty-num">${qty}</span>
+              <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+            </div>
+          </div>
         `;
         cartItemsDiv.appendChild(div);
       });
@@ -242,6 +414,7 @@
       currentView = 'cart';
       catalogPage.style.display = 'none';
       cartPage.style.display = 'block';
+      successPage.style.display = 'none';
       renderCart();
       updateMainButton();
     }
@@ -250,44 +423,49 @@
       currentView = 'catalog';
       catalogPage.style.display = 'block';
       cartPage.style.display = 'none';
+      successPage.style.display = 'none';
+      renderCatalog();
       updateMainButton();
     }
 
     function updateMainButton() {
-      const keys = Object.keys(cart);
-      if (keys.length > 0) {
-        let total = 0;
-        keys.forEach(id => {
-          total += products.find(p => p.id == id).price;
-        });
+      let totalCount = 0;
+      let totalPrice = 0;
+      Object.keys(cart).forEach(id => {
+        totalCount += cart[id];
+        totalPrice += products.find(p => p.id == id).price * cart[id];
+      });
 
+      if (totalCount > 0) {
         if (currentView === 'catalog') {
-          tg.MainButton.setText(`View Cart (${total} ₾)`);
+          tg.MainButton.setText(`View Cart (${totalPrice} ₾)`);
+          tg.MainButton.show();
+        } else if (currentView === 'cart') {
+          tg.MainButton.setText(`Confirm Order (${totalPrice} ₾)`);
+          tg.MainButton.show();
         } else {
-          tg.MainButton.setText(`Confirm Order (${total} ₾)`);
+          tg.MainButton.hide();
         }
-        tg.MainButton.show();
       } else {
         tg.MainButton.hide();
       }
     }
 
+    // Оформление заказа
     tg.MainButton.onClick(() => {
       if (currentView === 'catalog') {
         showCart(); 
-      } else {
-        tg.showAlert("⏳ Обработка заказа, подождите..."); 
-        
+      } else if (currentView === 'cart') {
         let orderText = "🪴 <b>НОВЫЙ ЗАКАЗ!</b>\n\n";
         
         Object.keys(cart).forEach(id => {
           const item = products.find(p => p.id == id);
-          orderText += `• ${item.name} — ${item.price} ₾ (Владелец: ${item.owner})\n`;
+          orderText += `• ${item.name} — ${item.price} ₾ × ${cart[id]} = ${item.price * cart[id]} ₾\n`;
         });
 
         let total = 0;
         Object.keys(cart).forEach(id => {
-          total += products.find(p => p.id == id).price;
+          total += products.find(p => p.id == id).price * cart[id];
         });
         orderText += `\n💰 <b>Итого: ${total} ₾</b>\n\n`;
 
@@ -300,29 +478,44 @@
         const BOT_TOKEN = "8824289991:AAHZ_9Zgh-TQQ6c4Vl9bK-WTwzQfuU9yxec"; 
         const CHAT_ID = "113667741"; 
 
-        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-        
-        fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: CHAT_ID,
-            text: orderText,
-            parse_mode: 'HTML'
-          })
-        }).then(response => {
-          if (response.ok) {
-            tg.showAlert("✅ Спасибо! Ваш заказ успешно оформлен 🌿", () => {
-              tg.close();
-            });
-          } else {
-            tg.showAlert("❌ Ошибка отправки. Проверьте настройки бота.");
-          }
-        }).catch(err => {
-          tg.showAlert("❌ Ошибка сети.");
-        });
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        form.target = '_blank';
+
+        const chatInput = document.createElement('input');
+        chatInput.type = 'hidden';
+        chatInput.name = 'chat_id';
+        chatInput.value = CHAT_ID;
+        form.appendChild(chatInput);
+
+        const textInput = document.createElement('input');
+        textInput.type = 'hidden';
+        textInput.name = 'text';
+        textInput.value = orderText;
+        form.appendChild(textInput);
+
+        const parseInput = document.createElement('input');
+        parseInput.type = 'hidden';
+        parseInput.name = 'parse_mode';
+        parseInput.value = 'HTML';
+        form.appendChild(parseInput);
+
+        document.body.appendChild(form);
+        form.submit();
+
+        // Очищаем корзину и показываем экран успеха
+        cart = {};
+        currentView = 'success';
+        catalogPage.style.display = 'none';
+        cartPage.style.display = 'none';
+        successPage.style.display = 'flex';
+        tg.MainButton.hide();
       }
     });
+
+    // Первичная отрисовка
+    renderCatalog();
   </script>
 </body>
 </html>
