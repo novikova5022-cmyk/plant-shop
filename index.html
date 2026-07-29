@@ -11,7 +11,6 @@
       --card-bg: var(--tg-theme-secondary-bg-color, #ffffff);
       --text-color: var(--tg-theme-text-color, #222222);
       --hint-color: var(--tg-theme-hint-color, #8e8e93);
-      /* Жестко фиксируем фирменный зеленый цвет Botanika, игнорируя розовую тему тг */
       --button-color: #2e7d32;
       --button-text: #ffffff;
     }
@@ -29,24 +28,28 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
-      gap: 8px;
+      gap: 6px;
     }
     .nav-tabs {
       display: flex;
-      gap: 6px;
+      gap: 4px;
       flex: 1;
+      overflow-x: auto;
+      scrollbar-width: none;
     }
+    .nav-tabs::-webkit-scrollbar { display: none; }
     .tab-btn {
       flex: 1;
-      padding: 8px 10px;
+      padding: 8px 8px;
       background: var(--card-bg);
       border: 1px solid #e0e0e0;
       border-radius: 10px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--text-color);
       cursor: pointer;
       text-align: center;
+      white-space: nowrap;
     }
     .tab-btn.active {
       background: var(--button-color);
@@ -58,7 +61,7 @@
       gap: 4px;
     }
     .select-pill {
-      padding: 6px 8px;
+      padding: 6px 6px;
       font-size: 11px;
       border: 1px solid #e0e0e0;
       border-radius: 8px;
@@ -69,13 +72,12 @@
       font-weight: 600;
     }
 
-    /* Виджет совета/аффирмации для корзины */
     .daily-card {
       background: linear-gradient(135deg, rgba(46,125,50,0.08), rgba(46,125,50,0.01));
       border: 1px solid rgba(46,125,50,0.15);
       border-radius: 12px;
       padding: 10px 12px;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -87,9 +89,7 @@
       flex: 1;
       color: var(--text-color);
     }
-    .daily-text b {
-      color: var(--button-color);
-    }
+    .daily-text b { color: var(--button-color); }
     .daily-refresh-btn {
       background: rgba(46,125,50,0.12);
       color: var(--button-color);
@@ -100,6 +100,25 @@
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
+    }
+
+    /* Кнопка "Удиви меня" для корзины */
+    .surpise-cart-btn {
+      background: linear-gradient(135deg, #2e7d32, #1b5e20);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(46,125,50,0.2);
     }
 
     .toolbar {
@@ -138,9 +157,7 @@
       margin-bottom: 8px;
       scrollbar-width: none;
     }
-    .filters::-webkit-scrollbar {
-      display: none;
-    }
+    .filters::-webkit-scrollbar { display: none; }
     .filter-btn {
       background: var(--card-bg);
       color: var(--text-color);
@@ -175,18 +192,12 @@
       overflow-x: auto;
       scrollbar-width: none;
     }
-    .trust-ticker::-webkit-scrollbar {
-      display: none;
-    }
-    .trust-ticker span {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-    }
+    .trust-ticker::-webkit-scrollbar { display: none; }
+    .trust-ticker span { display: inline-flex; align-items: center; gap: 3px; }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
       gap: 12px;
       padding-bottom: 80px;
     }
@@ -202,7 +213,7 @@
     }
     .card img {
       width: 100%;
-      height: 130px;
+      height: 125px;
       object-fit: cover;
       border-radius: 10px;
       background-color: #eee;
@@ -210,71 +221,80 @@
     
     .badge {
       position: absolute;
-      top: 16px;
-      left: 16px;
-      background: rgba(46, 125, 50, 0.9);
+      top: 14px;
+      left: 14px;
+      background: rgba(46, 125, 50, 0.95);
       color: #fff;
       font-size: 9px;
       font-weight: 700;
-      padding: 3px 7px;
+      padding: 3px 6px;
       border-radius: 6px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .sold-badge {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      background: rgba(0, 0, 0, 0.7);
+      top: 14px;
+      right: 14px;
+      background: rgba(0, 0, 0, 0.75);
       color: #fff;
       font-size: 9px;
       font-weight: 700;
-      padding: 3px 7px;
+      padding: 3px 6px;
       border-radius: 6px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .fav-btn {
       position: absolute;
-      top: 14px;
-      right: 14px;
+      top: 12px;
+      right: 12px;
       background: rgba(255, 255, 255, 0.95);
       border: 1.5px solid #ff9800;
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       z-index: 2;
-      transition: transform 0.1s ease;
     }
-    .fav-btn:active {
-      transform: scale(0.9);
-    }
-    .fav-btn span {
-      filter: grayscale(100%) opacity(80%);
-    }
-    .fav-btn.active span {
-      filter: none;
-    }
+    .fav-btn span { filter: grayscale(100%) opacity(80%); }
+    .fav-btn.active span { filter: none; }
 
     .title {
       font-size: 13px;
-      font-weight: 600;
-      margin: 8px 0 2px 0;
+      font-weight: 700;
+      margin: 6px 0 2px 0;
     }
     .desc {
       font-size: 11px;
       color: var(--hint-color);
-      margin-bottom: 2px;
+      margin-bottom: 4px;
       line-height: 1.2;
     }
+    
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+    .meta-pill {
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: rgba(0,0,0,0.04);
+      color: var(--text-color);
+    }
+    .meta-diff-easy { color: #2e7d32; background: rgba(46,125,50,0.08); }
+    .meta-diff-med { color: #d84315; background: rgba(216,67,21,0.08); }
+    .meta-diff-hard { color: #6a1b9a; background: rgba(106,27,154,0.08); }
+
     .root-status {
       font-size: 10px;
       font-weight: 600;
@@ -285,7 +305,7 @@
       display: inline-block;
       margin-bottom: 6px;
     }
-    
+
     .ask-photo-btn {
       display: inline-flex;
       align-items: center;
@@ -296,30 +316,36 @@
       color: var(--button-color);
       background: rgba(46,125,50,0.06);
       border: 1px dashed rgba(46,125,50,0.3);
-      padding: 5px 8px;
-      border-radius: 8px;
+      padding: 4px 6px;
+      border-radius: 6px;
       cursor: pointer;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       width: 100%;
       box-sizing: border-box;
-      transition: background 0.2s;
-    }
-    .ask-photo-btn:active {
-      background: rgba(46,125,50,0.15);
     }
 
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
     .price {
       font-size: 14px;
       font-weight: 700;
       color: var(--button-color);
-      margin-bottom: 8px;
     }
+    .social-proof {
+      font-size: 9px;
+      color: var(--hint-color);
+    }
+
     .btn {
       margin-top: auto;
       background: var(--button-color);
       color: var(--button-text);
       border: none;
-      padding: 8px;
+      padding: 7px;
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
@@ -344,15 +370,15 @@
       background: var(--button-color);
       color: var(--button-text);
       border: none;
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       border-radius: 6px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
     }
     .qty-num {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
     }
 
@@ -371,6 +397,59 @@
       font-size: 15px;
     }
 
+    /* Блок Выбор Ники во вкладке Важное */
+    .nika-choice-box {
+      background: linear-gradient(135deg, rgba(46,125,50,0.1), rgba(46,125,50,0.02));
+      border: 1.5px solid rgba(46,125,50,0.25);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .nika-choice-title {
+      font-weight: 700;
+      color: var(--button-color);
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    /* Стили паспорта коллекционера */
+    .passport-header {
+      background: linear-gradient(135deg, #1b5e20, #2e7d32);
+      color: #fff;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(46,125,50,0.2);
+    }
+    .passport-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .passport-level { font-size: 12px; opacity: 0.9; margin-bottom: 10px; }
+    .passport-stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      background: rgba(255,255,255,0.15);
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .achievement-item {
+      background: var(--card-bg);
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .achievement-item.locked { opacity: 0.4; filter: grayscale(1); }
+
     .cart-header {
       display: flex;
       justify-content: space-between;
@@ -388,64 +467,52 @@
     .cart-item {
       background: var(--card-bg);
       border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
-    .cart-item-info {
+    .cart-item-info { display: flex; flex-direction: column; }
+    .cart-item-title { font-size: 13px; font-weight: 600; }
+    .cart-item-price { font-size: 12px; color: var(--button-color); margin-top: 2px; }
+    .empty-cart { text-align: center; color: var(--hint-color); margin-top: 30px; font-size: 14px; }
+
+    .upsell-container { margin-top: 15px; }
+    .upsell-title { font-size: 12px; font-weight: 700; color: var(--button-color); margin-bottom: 8px; }
+    .upsell-grid {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .upsell-grid::-webkit-scrollbar { display: none; }
+    .upsell-mini-card {
+      background: var(--card-bg);
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 8px;
+      min-width: 120px;
+      flex: 1;
       display: flex;
       flex-direction: column;
-    }
-    .cart-item-title {
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .cart-item-price {
-      font-size: 12px;
-      color: var(--button-color);
-      margin-top: 4px;
-    }
-    .empty-cart {
-      text-align: center;
-      color: var(--hint-color);
-      margin-top: 40px;
-      font-size: 14px;
-    }
-
-    /* Блок допродаж (Upsell) в корзине */
-    .upsell-section {
-      margin-top: 15px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    }
-    .upsell-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--button-color);
-      margin-bottom: 8px;
-    }
-    .upsell-item {
-      display: flex;
       justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      padding: 6px 0;
-      border-top: 1px solid rgba(0,0,0,0.04);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
+    .upsell-mini-title { font-size: 11px; font-weight: 600; margin-bottom: 4px; line-height: 1.2; }
+    .upsell-mini-price { font-size: 11px; color: var(--button-color); font-weight: 700; margin-bottom: 6px; }
     .upsell-add-btn {
       background: rgba(46,125,50,0.1);
       color: var(--button-color);
       border: none;
-      padding: 4px 10px;
+      padding: 4px;
       border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
-      font-size: 11px;
+      font-size: 10px;
+      text-align: center;
     }
 
     .promo-box {
@@ -482,23 +549,9 @@
       max-width: 500px;
       margin: 0 auto;
     }
-    .success-icon {
-      font-size: 40px;
-      margin-bottom: 8px;
-    }
-    .success-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      text-align: center;
-    }
-    .success-text {
-      font-size: 13px;
-      color: var(--hint-color);
-      line-height: 1.4;
-      margin-bottom: 20px;
-      text-align: center;
-    }
+    .success-icon { font-size: 40px; margin-bottom: 8px; }
+    .success-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; text-align: center; }
+    .success-text { font-size: 13px; color: var(--hint-color); line-height: 1.4; margin-bottom: 20px; text-align: center; }
     .payment-card {
       background: var(--card-bg);
       border-radius: 12px;
@@ -511,9 +564,7 @@
       line-height: 1.5;
       text-align: left;
     }
-    .payment-card b {
-      color: var(--text-color);
-    }
+    .payment-card b { color: var(--text-color); }
 
     #toast {
       position: fixed;
@@ -531,18 +582,16 @@
       pointer-events: none;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    #toast.show {
-      transform: translateX(-50%) translateY(0);
-    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
 
-  <!-- Шапка: Каталог / Важное (переименовано) + Настройки -->
   <div class="top-bar">
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchTab('catalog')" id="tabCatalog">🌱 Catalog</button>
       <button class="tab-btn" onclick="switchTab('info')" id="tabInfo">ℹ️ Важное</button>
+      <button class="tab-btn" onclick="switchTab('passport')" id="tabPassport">📖 Паспорт</button>
     </div>
     <div class="settings-group">
       <select id="currencySelect" class="select-pill" onchange="renderCatalog()">
@@ -558,7 +607,7 @@
     </div>
   </div>
 
-  <!-- СТРАНИЦА КАТАЛОГА -->
+  <!-- КАТАЛОГ -->
   <div id="catalog-page">
     <div class="toolbar">
       <input type="text" id="searchInput" class="search-box" placeholder="Search plants..." oninput="renderCatalog()">
@@ -582,22 +631,30 @@
     </div>
 
     <div class="trust-ticker" id="trustTickerText">
-      <span>📍 Rustaveli Pickup</span>
-      <span>•</span>
-      <span>📸 Live Photos</span>
-      <span>•</span>
-      <span>🛡️ Safe Pack</span>
+      <span>📍 Rustaveli Pickup</span><span>•</span><span>📸 Live Photos</span><span>•</span><span>🛡️ Safe Pack</span>
     </div>
 
     <div class="grid" id="catalog"></div>
   </div>
 
-  <!-- СТРАНИЦА ВАЖНОЕ (бывш. About Us) -->
+  <!-- ВАЖНОЕ (с блоком "Выбор Ники") -->
   <div id="info-page" style="display: none;">
+    <!-- Блок Выбор Ники -->
+    <div class="nika-choice-box">
+      <div class="nika-choice-title" id="nikaChoiceTitle">👑 Выбор Ники на эту неделю:</div>
+      <p style="font-size: 12px; margin: 0; line-height: 1.4;" id="nikaChoiceDesc">
+        «Лично рекомендую <b>Alocasia Azlanii</b> и <b>Caladium Brandy</b> — идеальная корневая система, потрясающая текстура листьев и полностью адаптированы к условиям в Тбилиси!»
+      </p>
+    </div>
+
     <div class="info-card">
-      <h3 id="infoTitleExpert">👑 About Nika & Botanika</h3>
+      <h3 id="infoTitleExpert">👑 Why trust Botanika & Nika</h3>
       <p id="infoTextExpert">
-        Botanika Tbilisi is a boutique project created by <b>Nika</b> — a renowned expert and passionate collector of rare aroids. With years of deep professional experience in cultivating exotic plants, Nika personally inspects, adapts, and cares for every single specimen. If you are looking for rare Alocasias, pristine variegation, or professional advice, you are in the right place!
+        👋 Hi! I'm <b>Nika</b>. For years, I’ve been passionately collecting rare aroids. Botanika Tbilisi is built on uncompromising quality:<br><br>
+        ✅ <b>Manual check:</b> Every single plant is inspected by me personally before sending.<br>
+        📸 <b>Live photos:</b> We send you real photos/videos of your exact plant upon request.<br>
+        📦 <b>Safe packaging:</b> Professional insulation and root protection for Tbilisi delivery.<br>
+        ⭐ <b>500+ happy plant parents</b> in our community.
       </p>
     </div>
 
@@ -609,23 +666,48 @@
         • <b>Working hours:</b> 10:00 – 20:00 daily.
       </p>
     </div>
+  </div>
+
+  <!-- ЛИЧНЫЙ КАБИНЕТ / ПАСПОРТ КОЛЛЕКЦИОНЕРА -->
+  <div id="passport-page" style="display: none;">
+    <div class="passport-header">
+      <div class="passport-title" id="passUserName">🌿 Коллекционер Botanika</div>
+      <div class="passport-level" id="passUserLevel">Уровень: 🌱 Beginner Grower</div>
+      <div class="passport-stats">
+        <div>📦 Заказов: <b id="statOrders">0</b></div>
+        <div>🌱 Редких видов: <b id="statPlants">0 / 25</b></div>
+        <div>💎 Статус: <b id="statStatus">Активен</b></div>
+      </div>
+    </div>
+
+    <h3 style="font-size: 14px; margin: 15px 0 8px 0;" id="passAchieveTitle">🏆 Достижения коллекционера</h3>
+    <div class="achievements-grid">
+      <div class="achievement-item" id="ach1">🏆 Первый заказ</div>
+      <div class="achievement-item locked" id="ach2">🌿 Ароидный маньяк</div>
+      <div class="achievement-item locked" id="ach3">👑 Клуб редких</div>
+      <div class="achievement-item locked" id="ach4">📦 Постоянный клиент</div>
+    </div>
 
     <div class="info-card">
-      <h3 id="infoTitlePack">📦 Packaging & Roots</h3>
-      <p id="infoTextPack">
-        Every plant is packed with maximum care, securing the delicate root system and leaves. We provide clear root status markers (Well-rooted, Fresh cutting, Corm) so you always know what you are adopting.
+      <h3 id="passStampTitle">📖 Виртуальный паспорт марок</h3>
+      <p style="font-size: 12px; color: var(--hint-color); margin: 0;" id="passStampDesc">
+        Каждый купленный редкий экземпляр оставляет цветную марку в вашем физическом паспорте Botanika, который вы получаете при заказе на Руставели!
       </p>
     </div>
   </div>
 
-  <!-- СТРАНИЦА КОРЗИНЫ (с перенесенным виджетом совета и допродажами) -->
+  <!-- КОРЗИНА (с кнопкой "Удиви меня") -->
   <div id="cart-page" style="display: none;">
     <div class="cart-header">
       <h1 id="lblCartTitle" style="font-size:18px; margin:0;">🛒 Your Cart</h1>
       <button class="clear-cart-btn" onclick="clearCart()" id="btnClear">Clear Cart</button>
     </div>
 
-    <!-- Виджет Совет дня переехал сюда -->
+    <!-- Кнопка Удиви меня в корзине -->
+    <button class="surpise-cart-btn" onclick="surpriseMe()">
+      🎲 <span id="btnSurpriseText">Удиви меня (случайный выбор)</span>
+    </button>
+
     <div class="daily-card">
       <div class="daily-text" id="dailyWidgetText">
         🌿 <b>Tip of the day:</b> Alocasia Azlanii loves high humidity and ambient light without direct sun.
@@ -635,16 +717,23 @@
 
     <div id="cart-items"></div>
     
-    <!-- Блок допродаж (Cross-sell для увеличения чека) -->
-    <div class="upsell-section">
-      <div class="upsell-title" id="upsellTitle">💡 Recommended for your plants:</div>
-      <div class="upsell-item">
-        <span>🌱 Premium Aroid Soil Mix (1L) — <b>10 ₾</b></span>
-        <button class="upsell-add-btn" onclick="addUpsell('Premium Aroid Soil Mix', 10)">+ Add</button>
-      </div>
-      <div class="upsell-item" style="border-top: 1px solid rgba(0,0,0,0.04); padding-top: 6px; margin-top: 6px;">
-        <span>🦠 Fresh Sphagnum Moss (Pack) — <b>7 ₾</b></span>
-        <button class="upsell-add-btn" onclick="addUpsell('Sphagnum Moss Pack', 7)">+ Add</button>
+    <div class="upsell-container">
+      <div class="upsell-title" id="upsellTitle">💡 Frequently bought together:</div>
+      <div class="upsell-grid">
+        <div class="upsell-mini-card">
+          <div>
+            <div class="upsell-mini-title">🌱 Aroid Soil Mix (1L)</div>
+            <div class="upsell-mini-price">10 ₾</div>
+          </div>
+          <button class="upsell-add-btn" onclick="addUpsell('Premium Aroid Soil Mix', 10)">+ Add</button>
+        </div>
+        <div class="upsell-mini-card">
+          <div>
+            <div class="upsell-mini-title">🦠 Sphagnum Moss</div>
+            <div class="upsell-mini-price">7 ₾</div>
+          </div>
+          <button class="upsell-add-btn" onclick="addUpsell('Sphagnum Moss Pack', 7)">+ Add</button>
+        </div>
       </div>
     </div>
 
@@ -656,7 +745,7 @@
     <button class="btn" style="width:100%; margin-top:20px;" onclick="switchTab('catalog')" id="btnBack">← Back to Catalog</button>
   </div>
 
-  <!-- СТРАНИЦА УСПЕХА -->
+  <!-- УСПЕХ -->
   <div id="success-page" style="display: none;" class="success-screen">
     <div class="success-icon">🌿✨</div>
     <div class="success-title" id="lblSuccessTitle">Thank you for your order!</div>
@@ -669,7 +758,7 @@
 
       <b>🪙 Cryptocurrency (USDT):</b><br>
       Network: TRC20 / TON<br>
-      Address: <code>[ YOUR USDT WALLET ]</code><br><br>
+      Address: <code>[ YOUR USDT WALLET ]</i><br><br>
       
       <b>📍 Pickup & Delivery:</b><br>
       • Self-pickup: Rustaveli, Tbilisi<br>
@@ -691,6 +780,7 @@
       en: {
         tabCatalog: "🌱 Catalog",
         tabInfo: "ℹ️ Важное",
+        tabPassport: "📖 Passport",
         search: "Search plants...",
         all: "🌱 All",
         saved: "⭐ Saved",
@@ -707,7 +797,10 @@
         addToCart: "Add to cart",
         cartTitle: "🛒 Your Cart",
         clearCart: "Clear Cart",
-        upsellTitle: "💡 Recommended for your plants:",
+        surpriseBtn: "🎲 Surprise me (random plant)",
+        nikaTitle: "👑 Nika's Weekly Choice:",
+        nikaDesc: "«I personally recommend <b>Alocasia Azlanii</b> and <b>Caladium Brandy</b> — pristine roots, stunning leaves, fully adapted for Tbilisi!»",
+        upsellTitle: "💡 Frequently bought together:",
         promoPlaceholder: "Promo code...",
         apply: "Apply",
         back: "← Back to Catalog",
@@ -718,16 +811,15 @@
         toastAdded: "Added",
         toastCleared: "Cart cleared",
         promoApplied: "Promo code applied!",
-        infoExpertTitle: "👑 About Nika & Botanika",
-        infoExpertText: "Botanika Tbilisi is a boutique project created by <b>Nika</b> — a renowned expert and passionate collector of rare aroids. With years of deep professional experience, Nika personally inspects, adapts, and cares for every single specimen.",
+        infoExpertTitle: "👑 Why trust Botanika & Nika",
+        infoExpertText: `👋 Hi! I'm <b>Nika</b>. For years, I’ve been passionately collecting rare aroids. Botanika Tbilisi is built on uncompromising quality:<br><br>✅ <b>Manual check:</b> Every single plant is inspected by me personally.<br>📸 <b>Live photos:</b> Real photos of your exact plant upon request.<br>📦 <b>Safe packaging:</b> Professional insulation for Tbilisi.<br>⭐ <b>500+ happy plant parents</b> in our community.`,
         infoPickupTitle: "📍 Pickup & Delivery",
-        infoPickupText: "• <b>Self-pickup:</b> Rustaveli Avenue, Tbilisi<br>• <b>Delivery:</b> Courier delivery via Bolt / Yandex<br>• <b>Working hours:</b> 10:00 – 20:00",
-        infoPackTitle: "📦 Packaging & Roots",
-        infoPackText: "Every plant is packed with maximum care. We provide clear root status markers (Well-rooted, Fresh cutting, Corm) so you always know what you are adopting."
+        infoPickupText: "• <b>Self-pickup:</b> Rustaveli Avenue, Tbilisi (by appointment).<br>• <b>Delivery:</b> Safe courier delivery across Tbilisi via Bolt / Yandex.<br>• <b>Working hours:</b> 10:00 – 20:00 daily."
       },
       ru: {
         tabCatalog: "🌱 Каталог",
         tabInfo: "ℹ️ Важное",
+        tabPassport: "📖 Паспорт",
         search: "Поиск растений...",
         all: "🌱 Все",
         saved: "⭐ Избранное",
@@ -744,7 +836,10 @@
         addToCart: "В корзину",
         cartTitle: "🛒 Ваша корзина",
         clearCart: "Очистить",
-        upsellTitle: "💡 Рекомендуем для ухода:",
+        surpriseBtn: "🎲 Удиви меня (случайный выбор)",
+        nikaTitle: "👑 Выбор Ники на эту неделю:",
+        nikaDesc: "«Лично рекомендую <b>Alocasia Azlanii</b> и <b>Caladium Brandy</b> — идеальная корневая система, потрясающая текстура листьев и полная адаптация к Тбилиси!»",
+        upsellTitle: "💡 Часто покупают вместе:",
         promoPlaceholder: "Промокод...",
         apply: "Применить",
         back: "← Назад в каталог",
@@ -755,16 +850,15 @@
         toastAdded: "Добавлено",
         toastCleared: "Корзина очищена",
         promoApplied: "Промокод применен!",
-        infoExpertTitle: "👑 О Нике и Botanika",
-        infoExpertText: "Botanika Tbilisi — это бутик-проект, созданный <b>Никой</b>, известным экспертом и страстным коллекционером редких ароидных. Обладая многолетним опытом, Ника лично отбирает, адаптирует и заботится о каждом растении.",
+        infoExpertTitle: "👑 Почему доверяют Botanika и Нике",
+        infoExpertText: `👋 Привет! Я <b>Ника</b>. Много лет я профессионально коллекционирую редкие ароидные. Botanika Tbilisi — это бескомпромиссное качество:<br><br>✅ <b>Личная проверка:</b> Каждое растение я проверяю лично перед отправкой.<br>📸 <b>Живые фото:</b> Отправляем фото именно вашего экземпляра по запросу.<br>📦 <b>Надежная упаковка:</b> Защита корней и листьев для доставки по Тбилиси.<br>⭐ <b>500+ довольных коллекционеров</b> в нашем сообществе.`,
         infoPickupTitle: "📍 Самовывоз и доставка",
-        infoPickupText: "• <b>Самовывоз:</b> пр. Руставели, Тбилиси<br>• <b>Доставка:</b> Курьер Bolt / Yandex<br>• <b>Режим работы:</b> 10:00 – 20:00",
-        infoPackTitle: "📦 Упаковка и корни",
-        infoPackText: "Каждое растение упаковывается с заботой о корневой системе. Мы указываем честный статус корней (Well-rooted, Fresh cutting, Corm)."
+        infoPickupText: "• <b>Самовывоз:</b> пр. Руставели, Тбилиси (по предварительной договоренности).<br>• <b>Доставка:</b> Курьер Bolt / Yandex по Тбилиси.<br>• <b>Часы работы:</b> 10:00 – 20:00 ежедневно."
       },
       uk: {
         tabCatalog: "🌱 Каталог",
         tabInfo: "ℹ️ Важливе",
+        tabPassport: "📖 Паспорт",
         search: "Пошук рослин...",
         all: "🌱 Всі",
         saved: "⭐ Збережені",
@@ -781,7 +875,10 @@
         addToCart: "У кошик",
         cartTitle: "🛒 Ваш кошик",
         clearCart: "Очистити",
-        upsellTitle: "💡 Рекомендуємо для догляду:",
+        surpriseBtn: "🎲 Здивуй мене (випадковий вибір)",
+        nikaTitle: "👑 Вибір Ніки на цей тиждень:",
+        nikaDesc: "«Особисто рекомендую <b>Alocasia Azlanii</b> та <b>Caladium Brandy</b>!»",
+        upsellTitle: "💡 Часто купують разом:",
         promoPlaceholder: "Промокод...",
         apply: "Застосувати",
         back: "← Назад до каталогу",
@@ -792,16 +889,15 @@
         toastAdded: "Додано",
         toastCleared: "Кошик очищено",
         promoApplied: "Промокод застосовано!",
-        infoExpertTitle: "👑 Про Ніку та Botanika",
-        infoExpertText: "Botanika Tbilisi — бутік-проєкт, створений <b>Нікою</b>, відомим експертом та колекціонером рідкісних ароїдних. Маючи багаторічний досвід, Ніка особисто доглядає за кожним екземпляром.",
+        infoExpertTitle: "👑 Чому довіряють Botanika та Ніці",
+        infoExpertText: `👋 Привіт! Я <b>Ніка</b>.`,
         infoPickupTitle: "📍 Самовивіз та доставка",
-        infoPickupText: "• <b>Самовивіз:</b> проспект Руставелі, Тбілісі<br>• <b>Доставка:</b> Кур'єр Bolt / Yandex<br>• <b>Години роботи:</b> 10:00 – 20:00",
-        infoPackTitle: "📦 Упаковка та коріння",
-        infoPackText: "Кожна рослина пакується з максимальною турботою."
+        infoPickupText: "• <b>Самовивіз:</b> проспект Руставелі, Тбілісі."
       },
       ka: {
         tabCatalog: "🌱 კატალოგი",
         tabInfo: "ℹ️ მნიშვნელოვანი",
+        tabPassport: "📖 პასპორტი",
         search: "მცენარეების ძებნა...",
         all: "🌱 ყველა",
         saved: "⭐ რჩეული",
@@ -818,7 +914,10 @@
         addToCart: "კალათაში",
         cartTitle: "🛒 თქვენი კალათა",
         clearCart: "გასუფთავება",
-        upsellTitle: "💡 გირჩევთ მოვლისთვის:",
+        surpriseBtn: "🎲 გა მაკვირვე (შემთხვევითი)",
+        nikaTitle: "👑 ნიკას რეკომენდაცია:",
+        nikaDesc: "«პირადად გირჩევთ <b>Alocasia Azlanii</b>-ს!»",
+        upsellTitle: "💡 ხშირად ყიდულობენ ერთად:",
         promoPlaceholder: "პრომოკოდი...",
         apply: "არჩევა",
         back: "← კატალოგში დაბრუნება",
@@ -829,12 +928,10 @@
         toastAdded: "დამატებულია",
         toastCleared: "კალათა გასუფთავდა",
         promoApplied: "პრომოკოდი გააქტიურდა!",
-        infoExpertTitle: "👑 ნიკასა და Botanika-ს შესახებ",
-        infoExpertText: "Botanika Tbilisi არის ბუტიკი, რომელიც შექმნა <b>ნიკამ</b> — იშვიათი აროიდების ცნობილმა ექსპერტმა და კოლექციონერმა. მრავალწლიანი გამოცდილებით, ნიკა პირადად ამოწმებს და უვლის თითოეულ მცენარეს.",
+        infoExpertTitle: "👑 რატომ ენდობიან Botanika-ს და ნიკას",
+        infoExpertText: `👋 გამარჯობა! მე ვარ <b>ნიკა</b>.`,
         infoPickupTitle: "📍 თვითგატანა და მიწოდება",
-        infoPickupText: "• <b>თვითგატანა:</b> რუსთაველის გამზირი, თბილისი<br>• <b>მიწოდება:</b> კურიერი Bolt / Yandex<br>• <b>სამუშაო საათები:</b> 10:00 – 20:00",
-        infoPackTitle: "📦 შეფუთვა და ფესვები",
-        infoPackText: "ყველა მცენარე შეფუთულია მაქსიმალური სიფრთხილით."
+        infoPickupText: "• <b>თვითგატანა:</b> რუსთაველის გამზირი, თბილისი."
       }
     };
 
@@ -846,6 +943,7 @@
       
       document.getElementById('tabCatalog').textContent = t.tabCatalog;
       document.getElementById('tabInfo').textContent = t.tabInfo;
+      document.getElementById('tabPassport').textContent = t.tabPassport;
       searchInput.placeholder = t.search;
       document.getElementById('btnAll').textContent = t.all;
       document.getElementById('btnFav').textContent = t.saved;
@@ -858,6 +956,9 @@
       document.getElementById('trustTickerText').innerHTML = t.trustTicker;
       document.getElementById('lblCartTitle').textContent = t.cartTitle;
       document.getElementById('btnClear').textContent = t.clearCart;
+      document.getElementById('btnSurpriseText').textContent = t.surpriseBtn;
+      document.getElementById('nikaChoiceTitle').textContent = t.nikaTitle;
+      document.getElementById('nikaChoiceDesc').innerHTML = t.nikaDesc;
       document.getElementById('upsellTitle').textContent = t.upsellTitle;
       document.getElementById('promoInput').placeholder = t.promoPlaceholder;
       document.getElementById('btnApply').textContent = t.apply;
@@ -870,8 +971,6 @@
       document.getElementById('infoTextExpert').innerHTML = t.infoExpertText;
       document.getElementById('infoTitlePickup').textContent = t.infoPickupTitle;
       document.getElementById('infoTextPickup').innerHTML = t.infoPickupText;
-      document.getElementById('infoTitlePack').textContent = t.infoPackTitle;
-      document.getElementById('infoTextPack').textContent = t.infoPackText;
       
       renderCatalog();
       if (currentView === 'cart') renderCart();
@@ -889,32 +988,41 @@
       document.getElementById('dailyWidgetText').innerHTML = dailyTips[randomIndex];
     }
 
+    /* Функция "Удиви меня" — выбирает случайный товар и добавляет в корзину */
+    function surpriseMe() {
+      const availableProducts = products.filter(p => p.inStock && !(typeof p.id === 'string' && p.id.startsWith('upsell_')));
+      if (availableProducts.length === 0) return;
+      const randomPlant = availableProducts[Math.floor(Math.random() * availableProducts.length)];
+      changeQty(randomPlant.id, 1);
+      showToast(`🎲 Сюрприз! Выпало: ${randomPlant.name}`);
+    }
+
     const products = [
-      { id: 1, category: "Monstera", type: "Mature", badge: "Hot", root: "Well-rooted", name: "🌿 Monstera Classic", desc: "Healthy rooted plant", price: 40, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 2, category: "Mature", type: "Mature", badge: "New", root: "Well-rooted", name: "🌴 Strelitzia Nicolai", desc: "Beautiful large leaves", price: 65, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 3, category: "Caladium", type: "Mature", badge: "Rare", root: "Well-rooted", name: "🍾 Caladium Brandy", desc: "White Brandy variety", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 4, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", name: "🍹 Caladium Mint Julep", desc: "Minty fresh leaves", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 5, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", name: "🎭 Caladium Fantasia", desc: "Stunning colors", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 6, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", name: "🌙 Caladium Moonlight", desc: "Silvery white foliage", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 7, category: "Caladium", type: "Mature", badge: "Rare", root: "Well-rooted", name: "🍓 Caladium Strawberry Star", desc: "Pink spots on white", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 8, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", name: "🌸 Caladium Pink Beauty", desc: "Vibrant pink leaves", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 9, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", name: "♥️ Caladium Ace of Hearts", desc: "Heart-shaped pink center", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 10, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", name: "🔥 Caladium Wildfire", desc: "Fiery red foliage", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 11, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", name: "💖 Caladium Sweetheart", desc: "Beautiful pink hues", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 12, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", name: "💃 Caladium Ballerina", desc: "Elegant structure", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 13, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", name: "🎼 Caladium Spring Overture", desc: "Fresh spring look", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 14, category: "Alocasia", type: "Mature", badge: "Rare", root: "Well-rooted", name: "🦎 Alocasia Jacklyn", desc: "Unique textured leaves", price: 80, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 15, category: "Alocasia", type: "Baby", badge: "New", root: "Fresh cutting", name: "🧪 Alocasia Jacklyn (Baby)", desc: "In a sauce cup", price: 25, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 16, category: "Alocasia", type: "Mature", badge: "Hot", root: "Well-rooted", name: "🐉 Alocasia Dragon Scale", desc: "Dragon skin texture", price: 60, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 17, category: "Alocasia", type: "Mature", badge: "Rare", root: "Well-rooted", name: "🎀 Alocasia Nobilis Pink", desc: "Rare Korean selection", price: 70, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 18, category: "Alocasia", type: "Baby", badge: "", root: "Fresh cutting", name: "🌱 Alocasia Bambino", desc: "Compact and cute", price: 30, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 19, category: "Alocasia", type: "Mature", badge: "", root: "Well-rooted", name: "🐲 Alocasia Pink Dragon", desc: "Pink stems", price: 50, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 20, category: "Alocasia", type: "Mature", badge: "", root: "Well-rooted", name: "🧙‍♂️ Alocasia Gnomie", desc: "Dwarf variety", price: 45, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 21, category: "Alocasia", type: "Mature", badge: "Rare", root: "Well-rooted", name: "💎 Alocasia Azlanii", desc: "Metallic purple veins", price: 90, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 22, category: "Alocasia", type: "Bulb", badge: "", root: "Corm / Bulb", name: "🪵 Alocasia (Bulbs)", desc: "Grow your own", price: 15, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 23, category: "Alocasia", type: "Mature", badge: "New", root: "Well-rooted", name: "🐭 Xanthosoma Mickey Mouse", desc: "Variegated leaves", price: 55, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 24, category: "Calathea", type: "Mature", badge: "", root: "Well-rooted", name: "📜 Calathea Lancifolia", desc: "Rattlesnake plant", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 25, category: "Alocasia", type: "Mature", badge: "", root: "Well-rooted", name: "👑 Alocasia Cucullata", desc: "Hooded elephant ear", price: 40, inStock: true, img: "https://images.unsplash.com/photo-1632832447661-d70a13e2f170?auto=format&fit=crop&w=400&q=80" }
+      { id: 1, category: "Monstera", type: "Mature", badge: "Hot", root: "Well-rooted", diff: "Easy", diffClass: "meta-diff-easy", size: "30 cm", leaves: "4 leaves", name: "🌿 Monstera Classic", desc: "Healthy rooted plant", price: 40, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 2, category: "Mature", type: "Mature", badge: "New", root: "Well-rooted", diff: "Easy", diffClass: "meta-diff-easy", size: "45 cm", leaves: "5 leaves", name: "🌴 Strelitzia Nicolai", desc: "Beautiful large leaves", price: 65, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 3, category: "Caladium", type: "Mature", badge: "Rare", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "20 cm", leaves: "6 leaves", name: "🍾 Caladium Brandy", desc: "White Brandy variety", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 4, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "20 cm", leaves: "5 leaves", name: "🍹 Caladium Mint Julep", desc: "Minty fresh leaves", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 5, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "25 cm", leaves: "7 leaves", name: "🎭 Caladium Fantasia", desc: "Stunning colors", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 6, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "20 cm", leaves: "5 leaves", name: "🌙 Caladium Moonlight", desc: "Silvery white foliage", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 7, category: "Caladium", type: "Mature", badge: "Rare", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "22 cm", leaves: "6 leaves", name: "🍓 Caladium Strawberry Star", desc: "Pink spots on white", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 8, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "20 cm", leaves: "5 leaves", name: "🌸 Caladium Pink Beauty", desc: "Vibrant pink leaves", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 9, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "20 cm", leaves: "4 leaves", name: "♥️ Caladium Ace of Hearts", desc: "Heart-shaped pink center", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 10, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "25 cm", leaves: "6 leaves", name: "🔥 Caladium Wildfire", desc: "Fiery red foliage", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 11, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "20 cm", leaves: "5 leaves", name: "💖 Caladium Sweetheart", desc: "Beautiful pink hues", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 12, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "22 cm", leaves: "6 leaves", name: "💃 Caladium Ballerina", desc: "Elegant structure", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 13, category: "Caladium", type: "Mature", badge: "", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "20 cm", leaves: "5 leaves", name: "🎼 Caladium Spring Overture", desc: "Fresh spring look", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 14, category: "Alocasia", type: "Mature", badge: "Rare", root: "Well-rooted", diff: "Collector", diffClass: "meta-diff-hard", size: "25 cm", leaves: "3 leaves", name: "🦎 Alocasia Jacklyn", desc: "Unique textured leaves", price: 80, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 15, category: "Alocasia", type: "Baby", badge: "New", root: "Fresh cutting", diff: "Collector", diffClass: "meta-diff-hard", size: "10 cm", leaves: "2 leaves", name: "🧪 Alocasia Jacklyn (Baby)", desc: "In a sauce cup", price: 25, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 16, category: "Alocasia", type: "Mature", badge: "Hot", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "25 cm", leaves: "4 leaves", name: "🐉 Alocasia Dragon Scale", desc: "Dragon skin texture", price: 60, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 17, category: "Alocasia", type: "Mature", badge: "Rare", root: "Well-rooted", diff: "Collector", diffClass: "meta-diff-hard", size: "30 cm", leaves: "4 leaves", name: "🎀 Alocasia Nobilis Pink", desc: "Rare Korean selection", price: 70, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 18, category: "Alocasia", type: "Baby", badge: "", root: "Fresh cutting", diff: "Easy", diffClass: "meta-diff-easy", size: "15 cm", leaves: "3 leaves", name: "🌱 Alocasia Bambino", desc: "Compact and cute", price: 30, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 19, category: "Alocasia", type: "Mature", badge: "", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "35 cm", leaves: "4 leaves", name: "🐲 Alocasia Pink Dragon", desc: "Pink stems", price: 50, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 20, category: "Alocasia", type: "Mature", badge: "", root: "Well-rooted", diff: "Easy", diffClass: "meta-diff-easy", size: "20 cm", leaves: "4 leaves", name: "🧙‍♂️ Alocasia Gnomie", desc: "Dwarf variety", price: 45, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 21, category: "Alocasia", type: "Mature", badge: "Rare", root: "Well-rooted", diff: "Collector", diffClass: "meta-diff-hard", size: "25 cm", leaves: "3 leaves", name: "💎 Alocasia Azlanii", desc: "Metallic purple veins", price: 90, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 22, category: "Alocasia", type: "Bulb", badge: "", root: "Corm / Bulb", diff: "Medium", diffClass: "meta-diff-med", size: "1 corm", leaves: "Starter", name: "🪵 Alocasia (Bulbs)", desc: "Grow your own", price: 15, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 23, category: "Alocasia", type: "Mature", badge: "New", root: "Well-rooted", diff: "Collector", diffClass: "meta-diff-hard", size: "30 cm", leaves: "4 leaves", name: "🐭 Xanthosoma Mickey Mouse", desc: "Variegated leaves", price: 55, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 24, category: "Calathea", type: "Mature", badge: "", root: "Well-rooted", diff: "Medium", diffClass: "meta-diff-med", size: "25 cm", leaves: "8 leaves", name: "📜 Calathea Lancifolia", desc: "Rattlesnake plant", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 25, category: "Alocasia", type: "Mature", badge: "", root: "Well-rooted", diff: "Easy", diffClass: "meta-diff-easy", size: "40 cm", leaves: "5 leaves", name: "👑 Alocasia Cucullata", desc: "Hooded elephant ear", price: 40, inStock: true, img: "https://images.unsplash.com/photo-1632832447661-d70a13e2f170?auto=format&fit=crop&w=400&q=80" }
     ];
 
     let cart = {};
@@ -922,10 +1030,18 @@
     let currentView = 'catalog';
     let currentCategory = 'All';
 
+    // Данные личного кабинета (хранятся в localStorage)
+    let userStats = JSON.parse(localStorage.getItem('botanika_user_stats')) || {
+      ordersCount: 0,
+      collectedPlants: 0,
+      achievements: { firstOrder: false }
+    };
+
     const catalogDiv = document.getElementById('catalog');
     const cartItemsDiv = document.getElementById('cart-items');
     const catalogPage = document.getElementById('catalog-page');
     const infoPage = document.getElementById('info-page');
+    const passportPage = document.getElementById('passport-page');
     const cartPage = document.getElementById('cart-page');
     const successPage = document.getElementById('success-page');
     const searchInput = document.getElementById('searchInput');
@@ -936,9 +1052,7 @@
     function showToast(message) {
       toastDiv.textContent = message;
       toastDiv.classList.add('show');
-      setTimeout(() => {
-        toastDiv.classList.remove('show');
-      }, 2000);
+      setTimeout(() => { toastDiv.classList.remove('show'); }, 2000);
     }
 
     function formatPrice(priceGEL) {
@@ -953,11 +1067,13 @@
       currentView = tab;
       catalogPage.style.display = 'none';
       infoPage.style.display = 'none';
+      passportPage.style.display = 'none';
       cartPage.style.display = 'none';
       successPage.style.display = 'none';
 
       document.getElementById('tabCatalog').classList.remove('active');
       document.getElementById('tabInfo').classList.remove('active');
+      document.getElementById('tabPassport').classList.remove('active');
 
       if (tab === 'catalog') {
         catalogPage.style.display = 'block';
@@ -968,11 +1084,46 @@
         document.getElementById('tabInfo').classList.add('active');
         tg.MainButton.hide();
         return;
+      } else if (tab === 'passport') {
+        passportPage.style.display = 'block';
+        document.getElementById('tabPassport').classList.add('active');
+        renderPassport();
+        tg.MainButton.hide();
+        return;
       } else if (tab === 'cart') {
         cartPage.style.display = 'block';
         renderCart();
       }
       updateMainButton();
+    }
+
+    function renderPassport() {
+      const user = tg.initDataUnsafe?.user;
+      const name = user ? (user.first_name + (user.last_name ? ' ' + user.last_name : '')) : "Коллекционер Botanika";
+      document.getElementById('passUserName').textContent = `🌿 ${name}`;
+      
+      document.getElementById('statOrders').textContent = userStats.ordersCount;
+      document.getElementById('statPlants').textContent = `${userStats.collectedPlants} / 25`;
+
+      let levelText = "🌱 Beginner Grower";
+      if (userStats.ordersCount >= 3) levelText = "🌿 Active Grower";
+      if (userStats.ordersCount >= 5) levelText = "🪴 Aroid Collector";
+      if (userStats.ordersCount >= 10) levelText = "👑 Expert Botanist";
+      document.getElementById('passUserLevel').textContent = `Уровень: ${levelText}`;
+
+      // Ачивки
+      if (userStats.ordersCount > 0) {
+        document.getElementById('ach1').classList.remove('locked');
+      }
+      if (userStats.ordersCount >= 3) {
+        document.getElementById('ach2').classList.remove('locked');
+      }
+      if (userStats.collectedPlants >= 5) {
+        document.getElementById('ach3').classList.remove('locked');
+      }
+      if (userStats.ordersCount >= 5) {
+        document.getElementById('ach4').classList.remove('locked');
+      }
     }
 
     function toggleFavorite(id, event) {
@@ -989,12 +1140,9 @@
       }
     }
 
-    // Функция добавления допродажи (грунт, мох) в корзину
     function addUpsell(name, priceGEL) {
-      // Создаем уникальный виртуальный ID для допродаж
       const upsellId = 'upsell_' + name;
       if (!cart[upsellId]) {
-        // Сохраняем во временный массив продуктов, если еще нет
         if (!products.some(p => p.id === upsellId)) {
           products.push({ id: upsellId, name: name, price: priceGEL, inStock: true, desc: "Care accessory" });
         }
@@ -1012,7 +1160,7 @@
       const BOT_TOKEN = "8824289991:AAHZ_9Zgh-TQQ6c4Vl9bK-WTwzQfuU9yxec"; 
       const CHAT_ID = "113667741"; 
 
-      const text = `📸 <b>ЗАПРОС ФОТО!</b>\n\nПокупатель ${username} запрашивает дополнительные фото/видео для товара: <b>${plantName}</b>`;
+      const text = `📸 <b>ЗАПРОС ФОТО!</b>\n\nПокупатель ${username} запрашивает фото для товара: <b>${plantName}</b>`;
 
       fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: 'POST',
@@ -1029,7 +1177,7 @@
       const BOT_TOKEN = "8824289991:AAHZ_9Zgh-TQQ6c4Vl9bK-WTwzQfuU9yxec"; 
       const CHAT_ID = "113667741"; 
 
-      const notifyText = `🔔 <b>ЗАПРОС УВЕДОМЛЕНИЯ!</b>\n\nПокупатель ${username} хочет получить уведомление о товаре: <b>${productName}</b>`;
+      const notifyText = `🔔 <b>ЗАПРОС УВЕДОМЛЕНИЯ!</b>\n\nПокупатель ${username} хочет уведомление о товаре: <b>${productName}</b>`;
 
       fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: 'POST',
@@ -1054,7 +1202,7 @@
       const t = translations[currentLang];
 
       let filtered = products.filter(p => {
-        if (typeof p.id === 'string' && p.id.startsWith('upsell_')) return false; // Исключаем допродажи из каталога
+        if (typeof p.id === 'string' && p.id.startsWith('upsell_')) return false;
         let matchesCategory = true;
         if (currentCategory === 'Favorites') {
           matchesCategory = favorites[p.id];
@@ -1110,6 +1258,14 @@
           }
         }
 
+        const metaHTML = p.diff ? `
+          <div class="card-meta">
+            <span class="meta-pill ${p.diffClass}">${p.diff}</span>
+            <span class="meta-pill">🌿 ${p.leaves}</span>
+            <span class="meta-pill">📏 ${p.size}</span>
+          </div>
+        ` : '';
+
         card.innerHTML = `
           ${badgeHTML}
           ${soldBadgeHTML}
@@ -1117,9 +1273,13 @@
           <img src="${p.img}" alt="${p.name}">
           <div class="title">${p.name}</div>
           <div class="desc">${p.desc}</div>
+          ${metaHTML}
           <div class="root-status">🌱 ${p.root}</div>
           <button class="ask-photo-btn" onclick="askPhoto('${p.name}')">${t.askPhoto}</button>
-          <div class="price">${formatPrice(p.price)}</div>
+          <div class="price-row">
+            <div class="price">${formatPrice(p.price)}</div>
+            <div class="social-proof">⭐ 4.9</div>
+          </div>
           ${actionHTML}
         `;
         catalogDiv.appendChild(card);
@@ -1201,7 +1361,7 @@
           tg.MainButton.setText(`View Cart (${formattedTotal})`);
           tg.MainButton.show();
         } else if (currentView === 'cart') {
-          tg.MainButton.setText(`Confirm Order (${formattedTotal})`);
+          tg.MainButton.setText(`Get plants • ${formattedTotal}`);
           tg.MainButton.show();
         } else {
           tg.MainButton.hide();
@@ -1216,9 +1376,13 @@
         switchTab('cart'); 
       } else if (currentView === 'cart') {
         let orderText = "🪴 <b>НОВЫЙ ЗАКАЗ!</b>\n\n";
+        let purchasedPlantsCount = 0;
         
         Object.keys(cart).forEach(id => {
           const item = products.find(p => p.id == id);
+          if (item && !String(id).startsWith('upsell_')) {
+            purchasedPlantsCount += cart[id];
+          }
           if (item) {
             orderText += `• ${item.name} — ${formatPrice(item.price)} × ${cart[id]} = ${formatPrice(item.price * cart[id])}\n`;
           }
@@ -1252,10 +1416,16 @@
           })
         }).catch(err => console.log(err));
 
+        // Обновляем статистику личного кабинета (паспорта)
+        userStats.ordersCount += 1;
+        userStats.collectedPlants = Math.min(25, userStats.collectedPlants + purchasedPlantsCount);
+        localStorage.setItem('botanika_user_stats', JSON.stringify(userStats));
+
         cart = {};
         currentView = 'success';
         catalogPage.style.display = 'none';
         infoPage.style.display = 'none';
+        passportPage.style.display = 'none';
         cartPage.style.display = 'none';
         successPage.style.display = 'flex';
         tg.MainButton.hide();
