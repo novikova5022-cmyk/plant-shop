@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plant Catalog</title>
+  <title>Plant Shop</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
@@ -74,50 +74,110 @@
       font-weight: 600;
       cursor: pointer;
       font-size: 13px;
+      text-align: center;
     }
     .btn.added {
       background: #e0e0e0;
       color: #555;
     }
+    
+    /* Стили для корзины */
+    .cart-item {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .cart-item-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-item-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .cart-item-price {
+      font-size: 13px;
+      color: var(--button-color);
+      margin-top: 4px;
+    }
+    .cart-remove {
+      color: #ff3b30;
+      font-size: 13px;
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .empty-cart {
+      text-align: center;
+      color: var(--hint-color);
+      margin-top: 40px;
+      font-size: 15px;
+    }
   </style>
 </head>
 <body>
 
-  <h1>🌱 Plant Catalog</h1>
-  <div class="grid" id="catalog"></div>
+  <!-- СТРАНИЦА 1: КАТАЛОГ -->
+  <div id="catalog-page">
+    <h1>🌱 Plant Catalog</h1>
+    <div class="grid" id="catalog"></div>
+  </div>
+
+  <!-- СТРАНИЦА 2: КОРЗИНА -->
+  <div id="cart-page" style="display: none;">
+    <h1>🛒 Your Cart</h1>
+    <div id="cart-items"></div>
+    <button class="btn" style="width:100%; margin-top:20px;" onclick="showCatalog()">← Back to Catalog</button>
+  </div>
 
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
 
+    // ПОЛНЫЙ СПИСОК РАСТЕНИЙ ИЗ EXCEL
     const products = [
-      { 
-        id: 1, 
-        name: "Alocasia Cucullata", 
-        desc: "Rooted baby plant, active growth", 
-        price: 30, 
-        img: "https://share.gemini.google/nstHzCozni4Q" 
-      },
-      { 
-        id: 2, 
-        name: "Alocasia Dragon Scale", 
-        desc: "Dense textured leaves", 
-        price: 60, 
-        img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" 
-      },
-      { 
-        id: 3, 
-        name: "Monstera Classic", 
-        desc: "Healthy rooted cutting", 
-        price: 35, 
-        img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" 
-      }
+      { id: 1, name: "🌿 Monstera Classic", desc: "Healthy rooted plant", price: 40, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 2, name: "🌴 Strelitzia Nicolai", desc: "Beautiful large leaves", price: 65, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
+      { id: 3, name: "🍾 Caladium Brandy", desc: "White Brandy variety", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 4, name: "🍹 Caladium Mint Julep", desc: "Minty fresh leaves", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 5, name: "🎭 Caladium Fantasia", desc: "Stunning colors", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
+      { id: 6, name: "🌙 Caladium Moonlight", desc: "Silvery white foliage", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
+      { id: 7, name: "🍓 Caladium Strawberry Star", desc: "Pink spots on white", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 8, name: "🌸 Caladium Pink Beauty", desc: "Vibrant pink leaves", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 9, name: "♥️ Caladium Ace of Hearts", desc: "Heart-shaped pink center", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
+      { id: 10, name: "🔥 Caladium Wildfire", desc: "Fiery red foliage", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 11, name: "💖 Caladium Sweetheart", desc: "Beautiful pink hues", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
+      { id: 12, name: "💃 Caladium Ballerina", desc: "Elegant structure", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 13, name: "🎼 Caladium Spring Overture", desc: "Fresh spring look", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
+      { id: 14, name: "🦎 Alocasia Jacklyn", desc: "Unique textured leaves", price: 80, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 15, name: "🧪 Alocasia Jacklyn (Baby)", desc: "In a sauce cup", price: 25, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
+      { id: 16, name: "🐉 Alocasia Dragon Scale", desc: "Dragon skin texture", price: 60, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 17, name: "🎀 Alocasia Nobilis Pink", desc: "Rare Korean selection", price: 70, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 18, name: "🌱 Alocasia Bambino (Regular)", desc: "Compact and cute", price: 30, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
+      { id: 19, name: "🐲 Alocasia Pink Dragon", desc: "Pink stems", price: 50, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 20, name: "🧙‍♂️ Alocasia Gnomie", desc: "Dwarf variety", price: 45, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
+      { id: 21, name: "💎 Alocasia Azlanii", desc: "Metallic purple veins", price: 90, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 22, name: "🪵 Alocasia (Bulbs)", desc: "Grow your own", price: 15, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
+      { id: 23, name: "🐭 Xanthosoma Mickey Mouse", desc: "Variegated leaves", price: 55, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
+      { id: 24, name: "📜 Calathea Lancifolia", desc: "Rattlesnake plant", price: 35, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
+      { id: 25, name: "👑 Alocasia Cucullata", desc: "Hooded elephant ear", price: 40, img: "https://images.unsplash.com/photo-1632832447661-d70a13e2f170?auto=format&fit=crop&w=400&q=80", owner: "Юля" }
     ];
 
     let cart = {};
-    const catalog = document.getElementById('catalog');
+    let currentView = 'catalog'; // Переменная для отслеживания открытой страницы (каталог или корзина)
 
-    // Отрисовка товаров
+    const catalogDiv = document.getElementById('catalog');
+    const cartItemsDiv = document.getElementById('cart-items');
+    const catalogPage = document.getElementById('catalog-page');
+    const cartPage = document.getElementById('cart-page');
+
+    // 1. Рисуем каталог
     products.forEach(p => {
       const card = document.createElement('div');
       card.className = 'card';
@@ -128,10 +188,10 @@
         <div class="price">${p.price} ₾</div>
         <button class="btn" id="btn-${p.id}" onclick="toggleCart(${p.id})">Add to cart</button>
       `;
-      catalog.appendChild(card);
+      catalogDiv.appendChild(card);
     });
 
-    // Логика корзины
+    // 2. Добавление товара в корзину
     function toggleCart(id) {
       const btn = document.getElementById(`btn-${id}`);
       if (cart[id]) {
@@ -146,36 +206,100 @@
       updateMainButton();
     }
 
-    // Кнопка заказа внизу Telegram
+    // 3. Удаление товара со страницы корзины
+    function removeFromCart(id) {
+      delete cart[id];
+      const btn = document.getElementById(`btn-${id}`);
+      if (btn) {
+        btn.textContent = 'Add to cart';
+        btn.classList.remove('added');
+      }
+      renderCart();
+      updateMainButton();
+      
+      // Если корзина пуста, автоматически возвращаемся в каталог
+      if (Object.keys(cart).length === 0) {
+        showCatalog();
+      }
+    }
+
+    // 4. Отрисовка товаров внутри страницы корзины
+    function renderCart() {
+      cartItemsDiv.innerHTML = '';
+      const keys = Object.keys(cart);
+      
+      if (keys.length === 0) {
+        cartItemsDiv.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+        return;
+      }
+
+      keys.forEach(id => {
+        const item = products.find(p => p.id == id);
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <div class="cart-item-info">
+            <span class="cart-item-title">${item.name}</span>
+            <span class="cart-item-price">${item.price} ₾</span>
+          </div>
+          <button class="cart-remove" onclick="removeFromCart(${item.id})">Remove</button>
+        `;
+        cartItemsDiv.appendChild(div);
+      });
+    }
+
+    // 5. Переключение экранов (Каталог <-> Корзина)
+    function showCart() {
+      currentView = 'cart';
+      catalogPage.style.display = 'none';
+      cartPage.style.display = 'block';
+      renderCart();
+      updateMainButton();
+    }
+
+    function showCatalog() {
+      currentView = 'catalog';
+      catalogPage.style.display = 'block';
+      cartPage.style.display = 'none';
+      updateMainButton();
+    }
+
+    // 6. Управление текстом главной кнопки Telegram
     function updateMainButton() {
-      const count = Object.keys(cart).length;
-      if (count > 0) {
+      const keys = Object.keys(cart);
+      if (keys.length > 0) {
         let total = 0;
-        Object.keys(cart).forEach(id => {
-          const item = products.find(p => p.id == id);
-          total += item.price;
+        keys.forEach(id => {
+          total += products.find(p => p.id == id).price;
         });
-        tg.MainButton.setText(`Checkout (${total} ₾)`);
+
+        if (currentView === 'catalog') {
+          tg.MainButton.setText(`View Cart (${total} ₾)`);
+        } else {
+          tg.MainButton.setText(`Confirm Order (${total} ₾)`);
+        }
         tg.MainButton.show();
       } else {
         tg.MainButton.hide();
       }
     }
 
-    // Отправка данных при клике на кнопку заказа
+    // 7. Действие при нажатии на главную кнопку Telegram
     tg.MainButton.onClick(() => {
-      let orderItems = [];
-      Object.keys(cart).forEach(id => {
-        const item = products.find(p => p.id == id);
-        orderItems.push(item.name);
-      });
-      
-      const data = {
-        order: orderItems.join(", ")
-      };
-      
-      tg.sendData(JSON.stringify(data));
-      tg.close();
+      if (currentView === 'catalog') {
+        showCart(); // Если мы в каталоге, кнопка открывает корзину
+      } else {
+        // Если мы в корзине, кнопка подтверждает заказ и шлет данные в бот
+        let orderItems = [];
+        Object.keys(cart).forEach(id => {
+          const item = products.find(p => p.id == id);
+          // Покупатель видит только каталог, а вам в бот придет заказ с меткой владельца!
+          orderItems.push(`${item.name} [Owner: ${item.owner}]`);
+        });
+        
+        tg.sendData(JSON.stringify({ order: orderItems.join("; ") }));
+        tg.close();
+      }
     });
   </script>
 </body>
