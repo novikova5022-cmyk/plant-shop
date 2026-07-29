@@ -23,7 +23,6 @@
       box-sizing: border-box;
     }
     
-    /* Шапка магазина и инфо */
     .shop-header {
       background: var(--card-bg);
       border-radius: 14px;
@@ -67,7 +66,6 @@
       padding-top: 6px;
     }
 
-    /* Строка поиска и сортировки */
     .toolbar {
       display: flex;
       gap: 8px;
@@ -96,7 +94,6 @@
       max-width: 110px;
     }
 
-    /* Фильтры с ярлыками */
     .filters {
       display: flex;
       gap: 6px;
@@ -175,6 +172,27 @@
       border-radius: 6px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+    }
+
+    .fav-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.85);
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+    .fav-btn.active {
+      background: #ffebee;
     }
 
     .title {
@@ -291,6 +309,32 @@
       font-size: 15px;
     }
 
+    .promo-box {
+      margin-top: 15px;
+      display: flex;
+      gap: 8px;
+    }
+    .promo-input {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 13px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      outline: none;
+    }
+    .promo-btn {
+      background: var(--hint-color);
+      color: #fff;
+      border: none;
+      padding: 0 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
     .success-screen {
       padding: 20px 10px 40px 10px;
       display: flex;
@@ -356,7 +400,6 @@
 <body>
 
   <div id="catalog-page">
-    <!-- Шапка магазина с инфо и настройками -->
     <div class="shop-header">
       <div class="header-top">
         <h1 class="shop-title">🌿 Botanika Tbilisi</h1>
@@ -380,7 +423,6 @@
       </div>
     </div>
     
-    <!-- Поиск и сортировка -->
     <div class="toolbar">
       <input type="text" id="searchInput" class="search-box" placeholder="Search plants..." oninput="renderCatalog()">
       <select id="sortSelect" class="sort-select" onchange="renderCatalog()">
@@ -389,9 +431,9 @@
       </select>
     </div>
 
-    <!-- Фильтры по сортам и типам -->
     <div class="filters" id="filtersContainer">
       <button class="filter-btn active" onclick="setCategory('All', this)" id="btnAll">🌱 All</button>
+      <button class="filter-btn" onclick="setCategory('Favorites', this)" id="btnFav">⭐ Saved</button>
       <button class="filter-btn" onclick="setCategory('Alocasia', this)">🦎 Alocasia</button>
       <button class="filter-btn" onclick="setCategory('Caladium', this)">🌸 Caladium</button>
       <button class="filter-btn" onclick="setCategory('Monstera', this)">🌿 Monstera</button>
@@ -409,23 +451,32 @@
       <button class="clear-cart-btn" onclick="clearCart()" id="btnClear">Clear Cart</button>
     </div>
     <div id="cart-items"></div>
+    
+    <div class="promo-box">
+      <input type="text" id="promoInput" class="promo-input" placeholder="Promo code...">
+      <button class="promo-btn" onclick="applyPromo()" id="btnApply">Apply</button>
+    </div>
+
     <button class="btn" style="width:100%; margin-top:20px;" onclick="showCatalog()" id="btnBack">← Back to Catalog</button>
   </div>
 
   <div id="success-page" style="display: none;" class="success-screen">
     <div class="success-icon">🌿✨</div>
     <div class="success-title" id="lblSuccessTitle">Thank you for your order!</div>
-    <div class="success-text" id="lblSuccessText">Order successfully placed. Payment by bank transfer or cash upon pickup.</div>
+    <div class="success-text" id="lblSuccessText">Order successfully placed. Payment by bank transfer, cash, or USDT.</div>
     
     <div class="payment-card">
-      <b>💳 Bank Details:</b><br>
-      IBAN: <code>[ ЗДЕСЬ ВАШ IBAN ]</code><br>
-      Beneficiary: <b>[ ВАШЕ ИМЯ КАК В БАНКЕ ]</b><br><br>
+      <b>💳 Bank Details (GEL / USD):</b><br>
+      IBAN: <code>[ YOUR IBAN ]</code><br>
+      Beneficiary: <b>[ YOUR NAME ]</b><br><br>
+
+      <b>🪙 Cryptocurrency (USDT):</b><br>
+      Network: TRC20 / TON<br>
+      Address: <code>[ YOUR USDT WALLET ]</code><br><br>
       
       <b>📍 Pickup & Delivery:</b><br>
-      • Self-pickup or your own courier (Bolt / Yandex)<br>
-      • Address: <b>[ ВАШ АДРЕС В ТБИЛИСИ ]</b><br>
-      • Phone for courier: <b>[ ВАШ НОМЕР ТЕЛЕФОНА ]</b>
+      • Self-pickup: Avlabari, Tbilisi<br>
+      • Courier: Bolt / Yandex
     </div>
 
     <button class="btn" style="width:100%; max-width: 250px;" onclick="tg.close()" id="btnClose">Close & Return to Bot</button>
@@ -443,6 +494,7 @@
       en: {
         search: "Search plants...",
         all: "🌱 All",
+        saved: "⭐ Saved",
         mature: "🪴 Mature",
         babies: "👶 Babies",
         bulbs: "🪵 Bulbs",
@@ -453,17 +505,21 @@
         addToCart: "Add to cart",
         cartTitle: "🛒 Your Cart",
         clearCart: "Clear Cart",
+        promoPlaceholder: "Promo code...",
+        apply: "Apply",
         back: "← Back to Catalog",
         successTitle: "Thank you for your order!",
-        successText: "Order successfully placed. Payment by bank transfer or cash upon pickup.",
+        successText: "Order successfully placed. Payment by bank transfer, cash, or USDT.",
         close: "Close & Return to Bot",
         emptyCart: "Your cart is empty",
         toastAdded: "Added",
-        toastCleared: "Cart cleared"
+        toastCleared: "Cart cleared",
+        promoApplied: "Promo code applied!"
       },
       ru: {
         search: "Поиск растений...",
         all: "🌱 Все",
+        saved: "⭐ Избранное",
         mature: "🪴 Взрослые",
         babies: "👶 Детки",
         bulbs: "🪵 Клубни",
@@ -474,17 +530,21 @@
         addToCart: "В корзину",
         cartTitle: "🛒 Ваша корзина",
         clearCart: "Очистить",
+        promoPlaceholder: "Промокод...",
+        apply: "Применить",
         back: "← Назад в каталог",
         successTitle: "Спасибо за заказ!",
-        successText: "Заказ успешно оформлен. Оплата переводом или наличными при самовывозе.",
+        successText: "Заказ успешно оформлен. Оплата переводом, наличными или USDT.",
         close: "Закрыть и вернуться в бот",
         emptyCart: "Корзина пуста",
         toastAdded: "Добавлено",
-        toastCleared: "Корзина очищена"
+        toastCleared: "Корзина очищена",
+        promoApplied: "Промокод применен!"
       },
       uk: {
         search: "Пошук рослин...",
         all: "🌱 Всі",
+        saved: "⭐ Збережені",
         mature: "🪴 Дорослі",
         babies: "👶 Дітки",
         bulbs: "🪵 Бульби",
@@ -495,17 +555,21 @@
         addToCart: "У кошик",
         cartTitle: "🛒 Ваш кошик",
         clearCart: "Очистити",
+        promoPlaceholder: "Промокод...",
+        apply: "Застосувати",
         back: "← Назад до каталогу",
         successTitle: "Дякуємо за замовлення!",
-        successText: "Замовлення успішно оформлено. Оплата переказом або готівкою.",
+        successText: "Замовлення успішно оформлено. Оплата переказом, готівкою або USDT.",
         close: "Закрити та повернутися",
         emptyCart: "Кошик порожній",
         toastAdded: "Додано",
-        toastCleared: "Кошик очищено"
+        toastCleared: "Кошик очищено",
+        promoApplied: "Промокод застосовано!"
       },
       ka: {
         search: "მცენარეების ძებნა...",
         all: "🌱 ყველა",
+        saved: "⭐ რჩეული",
         mature: "🪴 ზრდასრული",
         babies: "👶 პატარა",
         bulbs: "🪵 ბოლქვები",
@@ -516,13 +580,16 @@
         addToCart: "კალათაში",
         cartTitle: "🛒 თქვენი კალათა",
         clearCart: "გასუფთავება",
+        promoPlaceholder: "პრომოკოდი...",
+        apply: "არჩევა",
         back: "← კატალოგში დაბრუნება",
         successTitle: "მადლობა შეკვეთისთვის!",
         successText: "შეკვეთა წარმატებით გაფორმდა.",
         close: "დახურვა",
         emptyCart: "კალათა ცარიელია",
         toastAdded: "დამატებულია",
-        toastCleared: "კალათა გასუფთავდა"
+        toastCleared: "კალათა გასუფთავდა",
+        promoApplied: "პრომოკოდი გააქტიურდა!"
       }
     };
 
@@ -534,12 +601,15 @@
       
       searchInput.placeholder = t.search;
       document.getElementById('btnAll').textContent = t.all;
+      document.getElementById('btnFav').textContent = t.saved;
       document.getElementById('btnMature').textContent = t.mature;
       document.getElementById('btnBaby').textContent = t.babies;
       document.getElementById('btnBulb').textContent = t.bulbs;
       document.getElementById('shopInfoText').innerHTML = t.infoText;
       document.getElementById('lblCartTitle').textContent = t.cartTitle;
       document.getElementById('btnClear').textContent = t.clearCart;
+      document.getElementById('promoInput').placeholder = t.promoPlaceholder;
+      document.getElementById('btnApply').textContent = t.apply;
       document.getElementById('btnBack').textContent = t.back;
       document.getElementById('lblSuccessTitle').textContent = t.successTitle;
       document.getElementById('lblSuccessText').textContent = t.successText;
@@ -549,17 +619,37 @@
       if (currentView === 'cart') renderCart();
     }
 
+    // Полный список всех 25 растений
     const products = [
       { id: 1, category: "Monstera", name: "🌿 Monstera Classic", desc: "Healthy rooted plant", price: 40, badge: "Hot", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
       { id: 2, category: "Mature", name: "🌴 Strelitzia Nicolai", desc: "Beautiful large leaves", price: 65, badge: "New", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
       { id: 3, category: "Caladium", name: "🍾 Caladium Brandy", desc: "White Brandy variety", price: 35, badge: "Rare", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 4, category: "Baby", name: "🧪 Alocasia Jacklyn (Baby)", desc: "In a sauce cup", price: 25, badge: "New", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 5, category: "Alocasia", name: "🦎 Alocasia Jacklyn", desc: "Unique textured leaves", price: 80, badge: "Rare", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 6, category: "Bulb", name: "🪵 Alocasia (Bulbs)", desc: "Grow your own", price: 15, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 7, category: "Alocasia", name: "💎 Alocasia Azlanii", desc: "Metallic purple veins", price: 90, badge: "Rare", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" }
+      { id: 4, category: "Caladium", name: "🍹 Caladium Mint Julep", desc: "Minty fresh leaves", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 5, category: "Caladium", name: "🎭 Caladium Fantasia", desc: "Stunning colors", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 6, category: "Caladium", name: "🌙 Caladium Moonlight", desc: "Silvery white foliage", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 7, category: "Caladium", name: "🍓 Caladium Strawberry Star", desc: "Pink spots on white", price: 35, badge: "Rare", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 8, category: "Caladium", name: "🌸 Caladium Pink Beauty", desc: "Vibrant pink leaves", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 9, category: "Caladium", name: "♥️ Caladium Ace of Hearts", desc: "Heart-shaped pink center", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 10, category: "Caladium", name: "🔥 Caladium Wildfire", desc: "Fiery red foliage", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 11, category: "Caladium", name: "💖 Caladium Sweetheart", desc: "Beautiful pink hues", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 12, category: "Caladium", name: "💃 Caladium Ballerina", desc: "Elegant structure", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 13, category: "Caladium", name: "🎼 Caladium Spring Overture", desc: "Fresh spring look", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 14, category: "Alocasia", name: "🦎 Alocasia Jacklyn", desc: "Unique textured leaves", price: 80, badge: "Rare", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 15, category: "Baby", name: "🧪 Alocasia Jacklyn (Baby)", desc: "In a sauce cup", price: 25, badge: "New", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 16, category: "Alocasia", name: "🐉 Alocasia Dragon Scale", desc: "Dragon skin texture", price: 60, badge: "Hot", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 17, category: "Alocasia", name: "🎀 Alocasia Nobilis Pink", desc: "Rare Korean selection", price: 70, badge: "Rare", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 18, category: "Baby", name: "🌱 Alocasia Bambino", desc: "Compact and cute", price: 30, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 19, category: "Alocasia", name: "🐲 Alocasia Pink Dragon", desc: "Pink stems", price: 50, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 20, category: "Alocasia", name: "🧙‍♂️ Alocasia Gnomie", desc: "Dwarf variety", price: 45, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 21, category: "Alocasia", name: "💎 Alocasia Azlanii", desc: "Metallic purple veins", price: 90, badge: "Rare", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 22, category: "Bulb", name: "🪵 Alocasia (Bulbs)", desc: "Grow your own", price: 15, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 23, category: "Alocasia", name: "🐭 Xanthosoma Mickey Mouse", desc: "Variegated leaves", price: 55, badge: "New", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 24, category: "Calathea", name: "📜 Calathea Lancifolia", desc: "Rattlesnake plant", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 25, category: "Alocasia", name: "👑 Alocasia Cucullata", desc: "Hooded elephant ear", price: 40, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1632832447661-d70a13e2f170?auto=format&fit=crop&w=400&q=80" }
     ];
 
     let cart = {};
+    let favorites = {};
     let currentView = 'catalog';
     let currentCategory = 'All';
 
@@ -587,6 +677,20 @@
         return `$${(priceGEL / EXCHANGE_RATE).toFixed(1)}`;
       }
       return `${priceGEL} ₾`;
+    }
+
+    function toggleFavorite(id, event) {
+      event.stopPropagation();
+      favorites[id] = !favorites[id];
+      showToast(favorites[id] ? "Added to favorites ⭐" : "Removed from favorites");
+      renderCatalog();
+    }
+
+    function applyPromo() {
+      const code = document.getElementById('promoInput').value.trim();
+      if (code) {
+        showToast(translations[currentLang].promoApplied);
+      }
     }
 
     function askPhoto(plantName) {
@@ -637,7 +741,12 @@
       const t = translations[currentLang];
 
       let filtered = products.filter(p => {
-        const matchesCategory = (currentCategory === 'All' || p.category === currentCategory);
+        let matchesCategory = true;
+        if (currentCategory === 'Favorites') {
+          matchesCategory = favorites[p.id];
+        } else if (currentCategory !== 'All') {
+          matchesCategory = (p.category === currentCategory);
+        }
         const matchesSearch = p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
         return matchesCategory && matchesSearch;
       });
@@ -660,6 +769,7 @@
         let actionHTML = '';
         let badgeHTML = p.badge ? `<div class="badge">${p.badge}</div>` : '';
         let soldBadgeHTML = '';
+        const isFav = favorites[p.id] ? 'active' : '';
 
         if (!p.inStock) {
           soldBadgeHTML = `<div class="sold-badge">${t.soldOut}</div>`;
@@ -682,6 +792,7 @@
         card.innerHTML = `
           ${badgeHTML}
           ${soldBadgeHTML}
+          <button class="fav-btn ${isFav}" onclick="toggleFavorite(${p.id}, event)">❤️</button>
           <img src="${p.img}" alt="${p.name}">
           <div class="title">${p.name}</div>
           <div class="desc">${p.desc}</div>
@@ -817,7 +928,7 @@
           orderText += `👤 <b>Покупатель:</b> ${username}\n`;
         }
         
-        orderText += `\n💳 <i>Оплата: переводом на карту</i>\n🚚 <i>Доставка: самостоятельный вызов курьера / самовывоз</i>`;
+        orderText += `\n💳 <i>Оплата: Банк / USDT</i>\n🚚 <i>Доставка: Самовывоз (Авлабари) / Курьер</i>`;
 
         const BOT_TOKEN = "8824289991:AAHZ_9Zgh-TQQ6c4Vl9bK-WTwzQfuU9yxec"; 
         const CHAT_ID = "113667741"; 
