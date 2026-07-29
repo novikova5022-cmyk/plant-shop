@@ -23,53 +23,25 @@
       box-sizing: border-box;
     }
     
-    .shop-header {
-      background: var(--card-bg);
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .header-top {
+    .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-    .shop-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin: 0;
-      color: var(--button-color);
-    }
-    .settings-group {
-      display: flex;
-      gap: 6px;
-    }
-    .select-pill {
-      padding: 5px 8px;
-      font-size: 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background: var(--card-bg);
-      color: var(--text-color);
-      outline: none;
-      cursor: pointer;
+      margin-bottom: 10px;
+      gap: 8px;
     }
     .nav-tabs {
       display: flex;
       gap: 6px;
-      margin-bottom: 10px;
+      flex: 1;
     }
     .tab-btn {
       flex: 1;
-      padding: 8px;
+      padding: 8px 10px;
       background: var(--card-bg);
-      border: 1px solid #ddd;
+      border: 1px solid #e0e0e0;
       border-radius: 10px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-color);
       cursor: pointer;
@@ -80,30 +52,45 @@
       color: var(--button-text);
       border-color: var(--button-color);
     }
+    .settings-group {
+      display: flex;
+      gap: 4px;
+    }
+    .select-pill {
+      padding: 6px 8px;
+      font-size: 11px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      outline: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
 
-    /* Виджет Карты дня с понятной кнопкой */
     .daily-card {
-      background: linear-gradient(135deg, rgba(46,125,50,0.1), rgba(46,125,50,0.02));
-      border: 1px solid rgba(46,125,50,0.2);
+      background: linear-gradient(135deg, rgba(46,125,50,0.08), rgba(46,125,50,0.01));
+      border: 1px solid rgba(46,125,50,0.15);
       border-radius: 12px;
-      padding: 10px 14px;
-      margin-bottom: 12px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
     }
     .daily-text {
-      font-size: 12px;
+      font-size: 11px;
       line-height: 1.4;
       flex: 1;
+      color: var(--text-color);
     }
     .daily-text b {
       color: var(--button-color);
     }
     .daily-refresh-btn {
-      background: var(--button-color);
-      color: var(--button-text);
+      background: rgba(46,125,50,0.12);
+      color: var(--button-color);
       border: none;
       padding: 6px 10px;
       border-radius: 8px;
@@ -121,8 +108,8 @@
     .search-box {
       flex: 1;
       padding: 10px 12px;
-      font-size: 14px;
-      border: 1px solid #ddd;
+      font-size: 13px;
+      border: 1px solid #e0e0e0;
       border-radius: 10px;
       background: var(--card-bg);
       color: var(--text-color);
@@ -132,13 +119,13 @@
     .sort-select {
       padding: 0 10px;
       font-size: 12px;
-      border: 1px solid #ddd;
+      border: 1px solid #e0e0e0;
       border-radius: 10px;
       background: var(--card-bg);
       color: var(--text-color);
       outline: none;
       cursor: pointer;
-      max-width: 110px;
+      max-width: 105px;
     }
 
     .filters {
@@ -146,7 +133,7 @@
       gap: 6px;
       overflow-x: auto;
       padding-bottom: 4px;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       scrollbar-width: none;
     }
     .filters::-webkit-scrollbar {
@@ -155,7 +142,7 @@
     .filter-btn {
       background: var(--card-bg);
       color: var(--text-color);
-      border: 1px solid #ddd;
+      border: 1px solid #e0e0e0;
       padding: 6px 12px;
       border-radius: 16px;
       font-size: 12px;
@@ -167,6 +154,33 @@
       background: var(--button-color);
       color: var(--button-text);
       border-color: var(--button-color);
+    }
+
+    /* Стильная полупрозрачная плашка доверия (в стиле ретро-титров) */
+    .trust-ticker {
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      backdrop-filter: blur(5px);
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 11px;
+      color: var(--hint-color);
+      text-align: center;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-around;
+      gap: 4px;
+      white-space: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .trust-ticker::-webkit-scrollbar {
+      display: none;
+    }
+    .trust-ticker span {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
     }
 
     .grid {
@@ -221,12 +235,11 @@
       letter-spacing: 0.5px;
     }
 
-    /* Стильная звезда для Избранного */
     .fav-btn {
       position: absolute;
       top: 14px;
       right: 14px;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       border: 1.5px solid #ff9800;
       width: 30px;
       height: 30px;
@@ -235,25 +248,23 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 15px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       z-index: 2;
       transition: transform 0.1s ease;
     }
     .fav-btn:active {
       transform: scale(0.9);
     }
-    /* Неактивная звезда: белая с оранжевым контуром */
     .fav-btn span {
-      filter: grayscale(100%) opacity(70%);
+      filter: grayscale(100%) opacity(80%);
     }
-    /* Активная звезда: желтая с оранжевым контуром */
     .fav-btn.active span {
       filter: none;
     }
 
     .title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       margin: 8px 0 2px 0;
     }
@@ -266,26 +277,39 @@
     .root-status {
       font-size: 10px;
       font-weight: 600;
-      color: #2e7d32;
+      color: var(--button-color);
       background: rgba(46,125,50,0.08);
       padding: 2px 6px;
       border-radius: 4px;
       display: inline-block;
       margin-bottom: 6px;
     }
-    .ask-photo {
+    
+    /* Улучшенная, заметная кнопка запроса живого фото */
+    .ask-photo-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
       font-size: 10px;
+      font-weight: 600;
       color: var(--button-color);
-      text-decoration: underline;
-      background: none;
-      border: none;
-      padding: 0;
+      background: rgba(46,125,50,0.06);
+      border: 1px dashed rgba(46,125,50,0.3);
+      padding: 5px 8px;
+      border-radius: 8px;
       cursor: pointer;
       margin-bottom: 8px;
-      text-align: left;
+      width: 100%;
+      box-sizing: border-box;
+      transition: background 0.2s;
     }
+    .ask-photo-btn:active {
+      background: rgba(46,125,50,0.15);
+    }
+
     .price {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--button-color);
       margin-bottom: 8px;
@@ -299,7 +323,7 @@
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12px;
       text-align: center;
     }
     .btn-sold {
@@ -344,7 +368,7 @@
     .info-card h3 {
       margin-top: 0;
       color: var(--button-color);
-      font-size: 16px;
+      font-size: 15px;
     }
 
     .cart-header {
@@ -376,11 +400,11 @@
       flex-direction: column;
     }
     .cart-item-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
     }
     .cart-item-price {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--button-color);
       margin-top: 4px;
     }
@@ -388,7 +412,7 @@
       text-align: center;
       color: var(--hint-color);
       margin-top: 40px;
-      font-size: 15px;
+      font-size: 14px;
     }
 
     .promo-box {
@@ -400,7 +424,7 @@
       flex: 1;
       padding: 8px 10px;
       font-size: 13px;
-      border: 1px solid #ddd;
+      border: 1px solid #e0e0e0;
       border-radius: 8px;
       background: var(--card-bg);
       color: var(--text-color);
@@ -430,7 +454,7 @@
       margin-bottom: 8px;
     }
     .success-title {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
       margin-bottom: 6px;
       text-align: center;
@@ -467,7 +491,7 @@
       color: #fff;
       padding: 10px 20px;
       border-radius: 20px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
       transition: transform 0.3s ease;
       z-index: 1000;
@@ -481,33 +505,28 @@
 </head>
 <body>
 
-  <!-- Навигация по вкладкам -->
-  <div class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('catalog')" id="tabCatalog">🌱 Catalog</button>
-    <button class="tab-btn" onclick="switchTab('info')" id="tabInfo">ℹ️ About Us & Info</button>
+  <!-- Профессиональная единая шапка -->
+  <div class="top-bar">
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('catalog')" id="tabCatalog">🌱 Catalog</button>
+      <button class="tab-btn" onclick="switchTab('info')" id="tabInfo">ℹ️ About Us</button>
+    </div>
+    <div class="settings-group">
+      <select id="currencySelect" class="select-pill" onchange="renderCatalog()">
+        <option value="GEL">₾ GEL</option>
+        <option value="USD">$ USD</option>
+      </select>
+      <select id="langSelect" class="select-pill" onchange="changeLanguage()">
+        <option value="en">EN</option>
+        <option value="ru">RU</option>
+        <option value="uk">UA</option>
+        <option value="ka">GE</option>
+      </select>
+    </div>
   </div>
 
   <!-- СТРАНИЦА КАТАЛОГА -->
   <div id="catalog-page">
-    <div class="shop-header">
-      <div class="header-top">
-        <h1 class="shop-title">🌿 Botanika Tbilisi</h1>
-        <div class="settings-group">
-          <select id="currencySelect" class="select-pill" onchange="renderCatalog()">
-            <option value="GEL">₾ GEL</option>
-            <option value="USD">$ USD</option>
-          </select>
-          <select id="langSelect" class="select-pill" onchange="changeLanguage()">
-            <option value="en">EN</option>
-            <option value="ru">RU</option>
-            <option value="uk">UA</option>
-            <option value="ka">GE</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <!-- Виджет Совет дня с понятной кнопкой смены -->
     <div class="daily-card">
       <div class="daily-text" id="dailyWidgetText">
         🌿 <b>Tip of the day:</b> Alocasia Azlanii loves high humidity and ambient light without direct sun.
@@ -534,6 +553,15 @@
       <button class="filter-btn" onclick="setCategory('Mature', this)" id="btnMature">🪴 Mature</button>
       <button class="filter-btn" onclick="setCategory('Baby', this)" id="btnBaby">👶 Babies</button>
       <button class="filter-btn" onclick="setCategory('Bulb', this)" id="btnBulb">🪵 Bulbs</button>
+    </div>
+
+    <!-- Полупрозрачная статичная плашка гарантий под фильтрами -->
+    <div class="trust-ticker" id="trustTickerText">
+      <span>📍 Rustaveli Pickup</span>
+      <span>•</span>
+      <span>📸 Live Photos</span>
+      <span>•</span>
+      <span>🛡️ Safe Pack</span>
     </div>
 
     <div class="grid" id="catalog"></div>
@@ -568,7 +596,7 @@
   <!-- СТРАНИЦА КОРЗИНЫ -->
   <div id="cart-page" style="display: none;">
     <div class="cart-header">
-      <h1 id="lblCartTitle">🛒 Your Cart</h1>
+      <h1 id="lblCartTitle" style="font-size:18px; margin:0;">🛒 Your Cart</h1>
       <button class="clear-cart-btn" onclick="clearCart()" id="btnClear">Clear Cart</button>
     </div>
     <div id="cart-items"></div>
@@ -615,7 +643,7 @@
     const translations = {
       en: {
         tabCatalog: "🌱 Catalog",
-        tabInfo: "ℹ️ About Us & Info",
+        tabInfo: "ℹ️ About Us",
         search: "Search plants...",
         all: "🌱 All",
         saved: "⭐ Saved",
@@ -625,7 +653,8 @@
         babies: "👶 Babies",
         bulbs: "🪵 Bulbs",
         newTipBtn: "✨ New tip",
-        askPhoto: "Ask manager for photos",
+        trustTicker: "<span>📍 Rustaveli Pickup</span><span>•</span><span>📸 Live Photos</span><span>•</span><span>🛡️ Safe Pack</span>",
+        askPhoto: "📸 Ask live photo",
         soldOut: "Sold Out",
         notifyMe: "Notify me",
         addToCart: "Add to cart",
@@ -650,7 +679,7 @@
       },
       ru: {
         tabCatalog: "🌱 Каталог",
-        tabInfo: "ℹ️ О нас и инфо",
+        tabInfo: "ℹ️ О нас",
         search: "Поиск растений...",
         all: "🌱 Все",
         saved: "⭐ Избранное",
@@ -660,7 +689,8 @@
         babies: "👶 Детки",
         bulbs: "🪵 Клубни",
         newTipBtn: "✨ Совет",
-        askPhoto: "Запросить фото у менеджера",
+        trustTicker: "<span>📍 Самовывоз Руставели</span><span>•</span><span>📸 Живые фото</span><span>•</span><span>🛡️ Надежная упак.</span>",
+        askPhoto: "📸 Запросить живое фото",
         soldOut: "Продано",
         notifyMe: "Сообщить о поступлении",
         addToCart: "В корзину",
@@ -675,7 +705,7 @@
         emptyCart: "Корзина пуста",
         toastAdded: "Добавлено",
         toastCleared: "Корзина очищена",
-        promoApplied: "Промокод применен!",
+        promoApplied: "Promo code applied!",
         infoExpertTitle: "👑 О Нике и Botanika",
         infoExpertText: "Botanika Tbilisi — это бутик-проект, созданный <b>Никой</b>, известным экспертом и страстным коллекционером редких ароидных. Обладая многолетним опытом, Ника лично отбирает, адаптирует и заботится о каждом растении.",
         infoPickupTitle: "📍 Самовывоз и доставка",
@@ -685,7 +715,7 @@
       },
       uk: {
         tabCatalog: "🌱 Каталог",
-        tabInfo: "ℹ️ Про нас та інфо",
+        tabInfo: "ℹ️ Про нас",
         search: "Пошук рослин...",
         all: "🌱 Всі",
         saved: "⭐ Збережені",
@@ -695,7 +725,8 @@
         babies: "👶 Дітки",
         bulbs: "🪵 Бульби",
         newTipBtn: "✨ Порада",
-        askPhoto: "Запросити фото у менеджера",
+        trustTicker: "<span>📍 Самовивіз Руставелі</span><span>•</span><span>📸 Живі фото</span><span>•</span><span>🛡️ Надійне пак.</span>",
+        askPhoto: "📸 Запросити живо фото",
         soldOut: "Продано",
         notifyMe: "Повідомити про появу",
         addToCart: "У кошик",
@@ -710,13 +741,13 @@
         emptyCart: "Кошик порожній",
         toastAdded: "Додано",
         toastCleared: "Кошик очищено",
-        promoApplied: "Промокод застосовано!",
+        promoApplied: "Promo code applied!",
         infoExpertTitle: "👑 Про Ніку та Botanika",
         infoExpertText: "Botanika Tbilisi — бутік-проєкт, створений <b>Нікою</b>, відомим експертом та колекціонером рідкісних ароїдних. Маючи багаторічний досвід, Ніка особисто доглядає за кожним екземпляром.",
         infoPickupTitle: "📍 Самовивіз та доставка",
         infoPickupText: "• <b>Самовивіз:</b> проспект Руставелі, Тбілісі<br>• <b>Доставка:</b> Кур'єр Bolt / Yandex<br>• <b>Години роботи:</b> 10:00 – 20:00",
         infoPackTitle: "📦 Упаковка та коріння",
-        infoPackText: "Кожна рослина пакується з максимальною турботою. We provide clear root status markers."
+        infoPackText: "Кожна рослина пакується з максимальною турботою."
       },
       ka: {
         tabCatalog: "🌱 კატალოგი",
@@ -730,7 +761,8 @@
         babies: "👶 პატარა",
         bulbs: "🪵 ბოლქვები",
         newTipBtn: "✨ რჩევა",
-        askPhoto: "ფოტოების მოთხოვნა",
+        trustTicker: "<span>📍 რუსთაველის თვითგატანა</span><span>•</span><span>📸 ცოცხალი ფოტოები</span><span>•</span><span>🛡️ უსაფრთხო შეფუთვა</span>",
+        askPhoto: "📸 ფოტოს მოთხოვნა",
         soldOut: "გაყიდულია",
         notifyMe: "შეტყობინება",
         addToCart: "კალათაში",
@@ -745,7 +777,7 @@
         emptyCart: "კალათა ცარიელია",
         toastAdded: "დამატებულია",
         toastCleared: "კალათა გასუფთავდა",
-        promoApplied: "პრომოკოდი გააქტიურდა!",
+        promoApplied: "Promo code applied!",
         infoExpertTitle: "👑 ნიკასა და Botanika-ს შესახებ",
         infoExpertText: "Botanika Tbilisi არის ბუტიკი, რომელიც შექმნა <b>ნიკამ</b> — იშვიათი აროიდების ცნობილმა ექსპერტმა და კოლექციონერმა. მრავალწლიანი გამოცდილებით, ნიკა პირადად ამოწმებს და უვლის თითოეულ მცენარეს.",
         infoPickupTitle: "📍 თვითგატანა და მიწოდება",
@@ -772,6 +804,7 @@
       document.getElementById('btnBaby').textContent = t.babies;
       document.getElementById('btnBulb').textContent = t.bulbs;
       document.getElementById('btnNewTip').textContent = t.newTipBtn;
+      document.getElementById('trustTickerText').innerHTML = t.trustTicker;
       document.getElementById('lblCartTitle').textContent = t.cartTitle;
       document.getElementById('btnClear').textContent = t.clearCart;
       document.getElementById('promoInput').placeholder = t.promoPlaceholder;
@@ -1015,7 +1048,7 @@
           <div class="title">${p.name}</div>
           <div class="desc">${p.desc}</div>
           <div class="root-status">🌱 ${p.root}</div>
-          <button class="ask-photo" onclick="askPhoto('${p.name}')">${t.askPhoto}</button>
+          <button class="ask-photo-btn" onclick="askPhoto('${p.name}')">${t.askPhoto}</button>
           <div class="price">${formatPrice(p.price)}</div>
           ${actionHTML}
         `;
