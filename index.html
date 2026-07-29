@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plant Shop</title>
+  <title>Botanika Tbilisi</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
@@ -30,7 +30,7 @@
     .top-bar {
       display: flex;
       gap: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .search-box {
       flex: 1;
@@ -43,7 +43,7 @@
       outline: none;
       box-sizing: border-box;
     }
-    .sort-select {
+    .sort-select, .currency-select {
       padding: 0 10px;
       font-size: 13px;
       border: 1px solid #ddd;
@@ -52,34 +52,6 @@
       color: var(--text-color);
       outline: none;
       cursor: pointer;
-    }
-
-    .filters {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-      scrollbar-width: none;
-    }
-    .filters::-webkit-scrollbar {
-      display: none;
-    }
-    .filter-btn {
-      background: var(--card-bg);
-      color: var(--text-color);
-      border: 1px solid #ddd;
-      padding: 6px 12px;
-      border-radius: 16px;
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .filter-btn.active {
-      background: var(--button-color);
-      color: var(--button-text);
-      border-color: var(--button-color);
     }
 
     .grid {
@@ -106,15 +78,29 @@
       background-color: #eee;
     }
     
+    .badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(46, 125, 50, 0.85);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
     .sold-badge {
       position: absolute;
-      top: 18px;
-      right: 18px;
+      top: 16px;
+      right: 16px;
       background: rgba(0, 0, 0, 0.7);
       color: #fff;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 3px 7px;
       border-radius: 6px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -128,8 +114,19 @@
     .desc {
       font-size: 11px;
       color: var(--hint-color);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       line-height: 1.2;
+    }
+    .ask-photo {
+      font-size: 10px;
+      color: var(--button-color);
+      text-decoration: underline;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      margin-bottom: 8px;
+      text-align: left;
     }
     .price {
       font-size: 15px;
@@ -159,7 +156,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: #f0f0f5;
+      background: rgba(0,0,0,0.05);
       border-radius: 8px;
       padding: 2px;
     }
@@ -215,11 +212,6 @@
       font-size: 13px;
       color: var(--button-color);
       margin-top: 4px;
-    }
-    .cart-item-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
     .empty-cart {
       text-align: center;
@@ -293,10 +285,14 @@
 <body>
 
   <div id="catalog-page">
-    <h1>🌱 Plant Catalog</h1>
+    <h1>🌱 Botanika Tbilisi</h1>
     
     <div class="top-bar">
       <input type="text" id="searchInput" class="search-box" placeholder="Search plants..." oninput="renderCatalog()">
+      <select id="currencySelect" class="currency-select" onchange="renderCatalog()">
+        <option value="GEL">₾ GEL</option>
+        <option value="USD">$ USD</option>
+      </select>
       <select id="sortSelect" class="sort-select" onchange="renderCatalog()">
         <option value="default">Sort</option>
         <option value="price-asc">Price: Low to High</option>
@@ -305,13 +301,6 @@
       </select>
     </div>
 
-    <div class="filters" id="filtersContainer">
-      <button class="filter-btn active" onclick="setCategory('All', this)">All</button>
-      <button class="filter-btn" onclick="setCategory('Alocasia', this)">Alocasia</button>
-      <button class="filter-btn" onclick="setCategory('Caladium', this)">Caladium</button>
-      <button class="filter-btn" onclick="setCategory('Monstera', this)">Monstera</button>
-      <button class="filter-btn" onclick="setCategory('Other', this)">Other</button>
-    </div>
     <div class="grid" id="catalog"></div>
   </div>
 
@@ -349,37 +338,38 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
+    const EXCHANGE_RATE = 2.7; // 1 USD ~ 2.7 GEL (примерный курс)
+
     const products = [
-      { id: 1, category: "Monstera", name: "🌿 Monstera Classic", desc: "Healthy rooted plant", price: 40, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 2, category: "Other", name: "🌴 Strelitzia Nicolai", desc: "Beautiful large leaves", price: 65, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 3, category: "Caladium", name: "🍾 Caladium Brandy", desc: "White Brandy variety", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 4, category: "Caladium", name: "🍹 Caladium Mint Julep", desc: "Minty fresh leaves", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 5, category: "Caladium", name: "🎭 Caladium Fantasia", desc: "Stunning colors", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 6, category: "Caladium", name: "🌙 Caladium Moonlight", desc: "Silvery white foliage", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 7, category: "Caladium", name: "🍓 Caladium Strawberry Star", desc: "Pink spots on white", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 8, category: "Caladium", name: "🌸 Caladium Pink Beauty", desc: "Vibrant pink leaves", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 9, category: "Caladium", name: "♥️ Caladium Ace of Hearts", desc: "Heart-shaped pink center", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 10, category: "Caladium", name: "🔥 Caladium Wildfire", desc: "Fiery red foliage", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 11, category: "Caladium", name: "💖 Caladium Sweetheart", desc: "Beautiful pink hues", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 12, category: "Caladium", name: "💃 Caladium Ballerina", desc: "Elegant structure", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 13, category: "Caladium", name: "🎼 Caladium Spring Overture", desc: "Fresh spring look", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 14, category: "Alocasia", name: "🦎 Alocasia Jacklyn", desc: "Unique textured leaves", price: 80, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 15, category: "Alocasia", name: "🧪 Alocasia Jacklyn (Baby)", desc: "In a sauce cup", price: 25, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 16, category: "Alocasia", name: "🐉 Alocasia Dragon Scale", desc: "Dragon skin texture", price: 60, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 17, category: "Alocasia", name: "🎀 Alocasia Nobilis Pink", desc: "Rare Korean selection", price: 70, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 18, category: "Alocasia", name: "🌱 Alocasia Bambino", desc: "Compact and cute", price: 30, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 19, category: "Alocasia", name: "🐲 Alocasia Pink Dragon", desc: "Pink stems", price: 50, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 20, category: "Alocasia", name: "🧙‍♂️ Alocasia Gnomie", desc: "Dwarf variety", price: 45, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 21, category: "Alocasia", name: "💎 Alocasia Azlanii", desc: "Metallic purple veins", price: 90, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 22, category: "Alocasia", name: "🪵 Alocasia (Bulbs)", desc: "Grow your own", price: 15, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 23, category: "Other", name: "🐭 Xanthosoma Mickey Mouse", desc: "Variegated leaves", price: 55, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 24, category: "Other", name: "📜 Calathea Lancifolia", desc: "Rattlesnake plant", price: 35, inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
-      { id: 25, category: "Alocasia", name: "👑 Alocasia Cucullata", desc: "Hooded elephant ear", price: 40, inStock: true, img: "https://images.unsplash.com/photo-1632832447661-d70a13e2f170?auto=format&fit=crop&w=400&q=80" }
+      { id: 1, name: "🌿 Monstera Classic", desc: "Healthy rooted plant", price: 40, badge: "Hot", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 2, name: "🌴 Strelitzia Nicolai", desc: "Beautiful large leaves", price: 65, badge: "New", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 3, name: "🍾 Caladium Brandy", desc: "White Brandy variety", price: 35, badge: "Rare", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 4, name: "🍹 Caladium Mint Julep", desc: "Minty fresh leaves", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 5, name: "🎭 Caladium Fantasia", desc: "Stunning colors", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 6, name: "🌙 Caladium Moonlight", desc: "Silvery white foliage", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 7, name: "🍓 Caladium Strawberry Star", desc: "Pink spots on white", price: 35, badge: "Rare", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 8, name: "🌸 Caladium Pink Beauty", desc: "Vibrant pink leaves", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 9, name: "♥️ Caladium Ace of Hearts", desc: "Heart-shaped pink center", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 10, name: "🔥 Caladium Wildfire", desc: "Fiery red foliage", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 11, name: "💖 Caladium Sweetheart", desc: "Beautiful pink hues", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 12, name: "💃 Caladium Ballerina", desc: "Elegant structure", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 13, name: "🎼 Caladium Spring Overture", desc: "Fresh spring look", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 14, name: "🦎 Alocasia Jacklyn", desc: "Unique textured leaves", price: 80, badge: "Rare", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 15, name: "🧪 Alocasia Jacklyn (Baby)", desc: "In a sauce cup", price: 25, badge: "New", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 16, name: "🐉 Alocasia Dragon Scale", desc: "Dragon skin texture", price: 60, badge: "Hot", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 17, name: "🎀 Alocasia Nobilis Pink", desc: "Rare Korean selection", price: 70, badge: "Rare", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 18, name: "🌱 Alocasia Bambino", desc: "Compact and cute", price: 30, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 19, name: "🐲 Alocasia Pink Dragon", desc: "Pink stems", price: 50, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 20, name: "🧙‍♂️ Alocasia Gnomie", desc: "Dwarf variety", price: 45, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 21, name: "💎 Alocasia Azlanii", desc: "Metallic purple veins", price: 90, badge: "Rare", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 22, name: "🪵 Alocasia (Bulbs)", desc: "Grow your own", price: 15, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 23, name: "🐭 Xanthosoma Mickey Mouse", desc: "Variegated leaves", price: 55, badge: "New", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 24, name: "📜 Calathea Lancifolia", desc: "Rattlesnake plant", price: 35, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" },
+      { id: 25, name: "👑 Alocasia Cucullata", desc: "Hooded elephant ear", price: 40, badge: "", inStock: true, img: "https://images.unsplash.com/photo-1632832447661-d70a13e2f170?auto=format&fit=crop&w=400&q=80" }
     ];
 
     let cart = {};
     let currentView = 'catalog';
-    let currentCategory = 'All';
 
     const catalogDiv = document.getElementById('catalog');
     const cartItemsDiv = document.getElementById('cart-items');
@@ -388,6 +378,7 @@
     const successPage = document.getElementById('success-page');
     const searchInput = document.getElementById('searchInput');
     const sortSelect = document.getElementById('sortSelect');
+    const currencySelect = document.getElementById('currencySelect');
     const toastDiv = document.getElementById('toast');
 
     function showToast(message) {
@@ -398,10 +389,35 @@
       }, 2000);
     }
 
+    function formatPrice(priceGEL) {
+      const currency = currencySelect.value;
+      if (currency === 'USD') {
+        const priceUSD = (priceGEL / EXCHANGE_RATE).toFixed(1);
+        return `$${priceUSD}`;
+      }
+      return `${priceGEL} ₾`;
+    }
+
+    function askPhoto(plantName) {
+      const user = tg.initDataUnsafe?.user;
+      const username = user && user.username ? `@${user.username}` : (user ? user.first_name : "User");
+      const BOT_TOKEN = "8824289991:AAHZ_9Zgh-TQQ6c4Vl9bK-WTwzQfuU9yxec"; 
+      const CHAT_ID = "113667741"; 
+
+      const text = `📸 <b>ЗАПРОС ФОТО!</b>\n\nПокупатель ${username} запрашивает дополнительные фото/видео для товара: <b>${plantName}</b>`;
+
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'HTML' })
+      }).catch(err => console.log(err));
+
+      showToast("Request sent to manager!");
+    }
+
     function notifyMe(productName) {
       const user = tg.initDataUnsafe?.user;
       const username = user && user.username ? `@${user.username}` : (user ? user.first_name : "User");
-      
       const BOT_TOKEN = "8824289991:AAHZ_9Zgh-TQQ6c4Vl9bK-WTwzQfuU9yxec"; 
       const CHAT_ID = "113667741"; 
 
@@ -411,7 +427,7 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chat_id: CHAT_ID, text: notifyText, parse_mode: 'HTML' })
-      });
+      }).catch(err => console.log(err));
 
       showToast("We will notify you when it's back!");
     }
@@ -422,9 +438,7 @@
       const sortType = sortSelect.value;
 
       let filtered = products.filter(p => {
-        const matchesCategory = (currentCategory === 'All' || p.category === currentCategory);
-        const matchesSearch = p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
-        return matchesCategory && matchesSearch;
+        return p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
       });
 
       if (sortType === 'price-asc') {
@@ -445,10 +459,11 @@
         card.className = 'card';
         
         let actionHTML = '';
-        let badgeHTML = '';
+        let badgeHTML = p.badge ? `<div class="badge">${p.badge}</div>` : '';
+        let soldBadgeHTML = '';
 
         if (!p.inStock) {
-          badgeHTML = `<div class="sold-badge">Sold Out</div>`;
+          soldBadgeHTML = `<div class="sold-badge">Sold Out</div>`;
           actionHTML = `<button class="btn btn-sold" onclick="notifyMe('${p.name}')">Notify me</button>`;
         } else {
           const qty = cart[p.id] || 0;
@@ -467,21 +482,16 @@
 
         card.innerHTML = `
           ${badgeHTML}
+          ${soldBadgeHTML}
           <img src="${p.img}" alt="${p.name}">
           <div class="title">${p.name}</div>
           <div class="desc">${p.desc}</div>
-          <div class="price">${p.price} ₾</div>
+          <button class="ask-photo" onclick="askPhoto('${p.name}')">Ask manager for photos</button>
+          <div class="price">${formatPrice(p.price)}</div>
           ${actionHTML}
         `;
         catalogDiv.appendChild(card);
       });
-    }
-
-    function setCategory(cat, btn) {
-      currentCategory = cat;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderCatalog();
     }
 
     function changeQty(id, delta) {
@@ -531,7 +541,7 @@
         div.innerHTML = `
           <div class="cart-item-info">
             <span class="cart-item-title">${item.name}</span>
-            <span class="cart-item-price">${item.price} ₾ × ${qty} = ${item.price * qty} ₾</span>
+            <span class="cart-item-price">${formatPrice(item.price)} × ${qty} = ${formatPrice(item.price * qty)}</span>
           </div>
           <div class="cart-item-actions">
             <div class="qty-control" style="width: 90px;">
@@ -565,18 +575,19 @@
 
     function updateMainButton() {
       let totalCount = 0;
-      let totalPrice = 0;
+      let totalPriceGEL = 0;
       Object.keys(cart).forEach(id => {
         totalCount += cart[id];
-        totalPrice += products.find(p => p.id == id).price * cart[id];
+        totalPriceGEL += products.find(p => p.id == id).price * cart[id];
       });
 
       if (totalCount > 0) {
+        const formattedTotal = formatPrice(totalPriceGEL);
         if (currentView === 'catalog') {
-          tg.MainButton.setText(`View Cart (${totalPrice} ₾)`);
+          tg.MainButton.setText(`View Cart (${formattedTotal})`);
           tg.MainButton.show();
         } else if (currentView === 'cart') {
-          tg.MainButton.setText(`Confirm Order (${totalPrice} ₾)`);
+          tg.MainButton.setText(`Confirm Order (${formattedTotal})`);
           tg.MainButton.show();
         } else {
           tg.MainButton.hide();
@@ -594,14 +605,14 @@
         
         Object.keys(cart).forEach(id => {
           const item = products.find(p => p.id == id);
-          orderText += `• ${item.name} — ${item.price} ₾ × ${cart[id]} = ${item.price * cart[id]} ₾\n`;
+          orderText += `• ${item.name} — ${formatPrice(item.price)} × ${cart[id]} = ${formatPrice(item.price * cart[id])}\n`;
         });
 
-        let total = 0;
+        let totalGEL = 0;
         Object.keys(cart).forEach(id => {
-          total += products.find(p => p.id == id).price * cart[id];
+          totalGEL += products.find(p => p.id == id).price * cart[id];
         });
-        orderText += `\n💰 <b>Итого: ${total} ₾</b>\n\n`;
+        orderText += `\n💰 <b>Итого: ${formatPrice(totalGEL)}</b>\n\n`;
 
         const user = tg.initDataUnsafe?.user;
         if (user) {
