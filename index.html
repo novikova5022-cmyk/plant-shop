@@ -80,8 +80,6 @@
       background: #e0e0e0;
       color: #555;
     }
-    
-    /* Стили для корзины */
     .cart-item {
       background: var(--card-bg);
       border-radius: 12px;
@@ -123,13 +121,11 @@
 </head>
 <body>
 
-  <!-- СТРАНИЦА 1: КАТАЛОГ -->
   <div id="catalog-page">
     <h1>🌱 Plant Catalog</h1>
     <div class="grid" id="catalog"></div>
   </div>
 
-  <!-- СТРАНИЦА 2: КОРЗИНА -->
   <div id="cart-page" style="display: none;">
     <h1>🛒 Your Cart</h1>
     <div id="cart-items"></div>
@@ -140,7 +136,6 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    // ПОЛНЫЙ СПИСОК РАСТЕНИЙ ИЗ EXCEL
     const products = [
       { id: 1, name: "🌿 Monstera Classic", desc: "Healthy rooted plant", price: 40, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Юля" },
       { id: 2, name: "🌴 Strelitzia Nicolai", desc: "Beautiful large leaves", price: 65, img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80", owner: "Ника" },
@@ -170,14 +165,13 @@
     ];
 
     let cart = {};
-    let currentView = 'catalog'; // Переменная для отслеживания открытой страницы (каталог или корзина)
+    let currentView = 'catalog';
 
     const catalogDiv = document.getElementById('catalog');
     const cartItemsDiv = document.getElementById('cart-items');
     const catalogPage = document.getElementById('catalog-page');
     const cartPage = document.getElementById('cart-page');
 
-    // 1. Рисуем каталог
     products.forEach(p => {
       const card = document.createElement('div');
       card.className = 'card';
@@ -191,7 +185,6 @@
       catalogDiv.appendChild(card);
     });
 
-    // 2. Добавление товара в корзину
     function toggleCart(id) {
       const btn = document.getElementById(`btn-${id}`);
       if (cart[id]) {
@@ -206,7 +199,6 @@
       updateMainButton();
     }
 
-    // 3. Удаление товара со страницы корзины
     function removeFromCart(id) {
       delete cart[id];
       const btn = document.getElementById(`btn-${id}`);
@@ -217,13 +209,11 @@
       renderCart();
       updateMainButton();
       
-      // Если корзина пуста, автоматически возвращаемся в каталог
       if (Object.keys(cart).length === 0) {
         showCatalog();
       }
     }
 
-    // 4. Отрисовка товаров внутри страницы корзины
     function renderCart() {
       cartItemsDiv.innerHTML = '';
       const keys = Object.keys(cart);
@@ -248,7 +238,6 @@
       });
     }
 
-    // 5. Переключение экранов (Каталог <-> Корзина)
     function showCart() {
       currentView = 'cart';
       catalogPage.style.display = 'none';
@@ -264,7 +253,6 @@
       updateMainButton();
     }
 
-    // 6. Управление текстом главной кнопки Telegram
     function updateMainButton() {
       const keys = Object.keys(cart);
       if (keys.length > 0) {
@@ -284,12 +272,12 @@
       }
     }
 
-    // 7. Действие при нажатии на главную кнопку Telegram
     tg.MainButton.onClick(() => {
       if (currentView === 'catalog') {
         showCart(); 
       } else {
-        // 1. Формируем красивый текст заказа
+        tg.showAlert("⏳ Обработка заказа, подождите..."); 
+        
         let orderText = "🪴 <b>НОВЫЙ ЗАКАЗ!</b>\n\n";
         
         Object.keys(cart).forEach(id => {
@@ -297,21 +285,18 @@
           orderText += `• ${item.name} — ${item.price} ₾ (Владелец: ${item.owner})\n`;
         });
 
-        // Считаем сумму
         let total = 0;
         Object.keys(cart).forEach(id => {
           total += products.find(p => p.id == id).price;
         });
         orderText += `\n💰 <b>Итого: ${total} ₾</b>\n\n`;
 
-        // Добавляем данные покупателя из Telegram
         const user = tg.initDataUnsafe?.user;
         if (user) {
           const username = user.username ? `@${user.username}` : user.first_name;
           orderText += `👤 <b>Покупатель:</b> ${username}\n`;
         }
 
-        // 2. ОТПРАВЛЯЕМ ЗАКАЗ В TELEGRAM
         const BOT_TOKEN = "8824289991:AAHZ_9Zgh-TQQ6c4Vl9bK-WTwzQfuU9yxec"; 
         const CHAT_ID = "113667741"; 
 
@@ -327,12 +312,17 @@
           })
         }).then(response => {
           if (response.ok) {
-            tg.showAlert("Спасибо! Ваш заказ успешно оформлен 🌿", () => {
-              tg.close(); // Закрываем только после нажатия ОК
+            tg.showAlert("✅ Спасибо! Ваш заказ успешно оформлен 🌿", () => {
+              tg.close();
             });
           } else {
-            tg.showAlert("Ой, произошла ошибка при отправке заказа.");
+            tg.showAlert("❌ Ошибка отправки. Проверьте настройки бота.");
           }
+        }).catch(err => {
+          tg.showAlert("❌ Ошибка сети.");
         });
       }
     });
+  </script>
+</body>
+</html>
