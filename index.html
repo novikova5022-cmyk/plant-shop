@@ -287,20 +287,53 @@
     // 7. Действие при нажатии на главную кнопку Telegram
     tg.MainButton.onClick(() => {
       if (currentView === 'catalog') {
-        showCart(); // Если мы в каталоге, кнопка открывает корзину
+        showCart(); 
       } else {
-        // Если мы в корзине, кнопка подтверждает заказ и шлет данные в бот
-        let orderItems = [];
+        // 1. Формируем красивый текст заказа
+        let orderText = "🪴 <b>НОВЫЙ ЗАКАЗ!</b>\n\n";
+        
         Object.keys(cart).forEach(id => {
           const item = products.find(p => p.id == id);
-          // Покупатель видит только каталог, а вам в бот придет заказ с меткой владельца!
-          orderItems.push(`${item.name} [Owner: ${item.owner}]`);
+          orderText += `• ${item.name} — ${item.price} ₾ (Владелец: ${item.owner})\n`;
         });
+
+        // Считаем сумму
+        let total = 0;
+        Object.keys(cart).forEach(id => {
+          total += products.find(p => p.id == id).price;
+        });
+        orderText += `\n💰 <b>Итого: ${total} ₾</b>\n\n`;
+
+        // Добавляем данные покупателя из Telegram
+        const user = tg.initDataUnsafe?.user;
+        if (user) {
+          const username = user.username ? `@${user.username}` : user.first_name;
+          orderText += `👤 <b>Покупатель:</b> ${username}\n`;
+        }
+
+        // 2. ОТПРАВЛЯЕМ ЗАКАЗ В TELEGRAM
+        const BOT_TOKEN = "8824289991:AAHZ_9Zgh-TQQ6c4Vl9bK-WTwzQfuU9yxec
+"; 
+        const CHAT_ID = "113667741"; 
+
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
         
-        tg.sendData(JSON.stringify({ order: orderItems.join("; ") }));
-        tg.close();
+        fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: orderText,
+            parse_mode: 'HTML'
+          })
+        }).then(response => {
+          if (response.ok) {
+            tg.showAlert("Спасибо! Ваш заказ успешно оформлен 🌿", () => {
+              tg.close(); // Закрываем только после нажатия ОК
+            });
+          } else {
+            tg.showAlert("Ой, произошла ошибка при отправке заказа.");
+          }
+        });
       }
     });
-  </script>
-</body>
-</html>
