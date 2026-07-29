@@ -81,7 +81,7 @@
       border-color: var(--button-color);
     }
 
-    /* Виджет Карты дня */
+    /* Виджет Карты дня с понятной кнопкой */
     .daily-card {
       background: linear-gradient(135deg, rgba(46,125,50,0.1), rgba(46,125,50,0.02));
       border: 1px solid rgba(46,125,50,0.2);
@@ -91,20 +91,26 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
     }
     .daily-text {
       font-size: 12px;
       line-height: 1.4;
+      flex: 1;
     }
     .daily-text b {
       color: var(--button-color);
     }
-    .daily-refresh {
-      background: none;
+    .daily-refresh-btn {
+      background: var(--button-color);
+      color: var(--button-text);
       border: none;
-      font-size: 16px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
       cursor: pointer;
-      padding: 4px;
+      white-space: nowrap;
     }
 
     .toolbar {
@@ -215,25 +221,35 @@
       letter-spacing: 0.5px;
     }
 
+    /* Стильная звезда для Избранного */
     .fav-btn {
       position: absolute;
       top: 14px;
       right: 14px;
-      background: rgba(255, 255, 255, 0.85);
-      border: none;
-      width: 28px;
-      height: 28px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid #ff9800;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 15px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       z-index: 2;
+      transition: transform 0.1s ease;
     }
-    .fav-btn.active {
-      background: #ffebee;
+    .fav-btn:active {
+      transform: scale(0.9);
+    }
+    /* Неактивная звезда: белая с оранжевым контуром */
+    .fav-btn span {
+      filter: grayscale(100%) opacity(70%);
+    }
+    /* Активная звезда: желтая с оранжевым контуром */
+    .fav-btn.active span {
+      filter: none;
     }
 
     .title {
@@ -316,7 +332,6 @@
       font-weight: 600;
     }
 
-    /* Инфо-страница (About Us & Hub) */
     .info-card {
       background: var(--card-bg);
       border-radius: 14px;
@@ -492,12 +507,12 @@
       </div>
     </div>
 
-    <!-- Виджет Карты дня / Пожелания -->
+    <!-- Виджет Совет дня с понятной кнопкой смены -->
     <div class="daily-card">
       <div class="daily-text" id="dailyWidgetText">
-        🌿 <b>Plant of the day:</b> Alocasia Azlanii — pure magic for your collection!
+        🌿 <b>Tip of the day:</b> Alocasia Azlanii loves high humidity and ambient light without direct sun.
       </div>
-      <button class="daily-refresh" onclick="refreshDailyCard()" title="New tip">✨</button>
+      <button class="daily-refresh-btn" onclick="refreshDailyCard()" id="btnNewTip">✨ New tip</button>
     </div>
     
     <div class="toolbar">
@@ -609,6 +624,7 @@
         mature: "🪴 Mature",
         babies: "👶 Babies",
         bulbs: "🪵 Bulbs",
+        newTipBtn: "✨ New tip",
         askPhoto: "Ask manager for photos",
         soldOut: "Sold Out",
         notifyMe: "Notify me",
@@ -643,6 +659,7 @@
         mature: "🪴 Взрослые",
         babies: "👶 Детки",
         bulbs: "🪵 Клубни",
+        newTipBtn: "✨ Совет",
         askPhoto: "Запросить фото у менеджера",
         soldOut: "Продано",
         notifyMe: "Сообщить о поступлении",
@@ -677,6 +694,7 @@
         mature: "🪴 Дорослі",
         babies: "👶 Дітки",
         bulbs: "🪵 Бульби",
+        newTipBtn: "✨ Порада",
         askPhoto: "Запросити фото у менеджера",
         soldOut: "Продано",
         notifyMe: "Повідомити про появу",
@@ -698,7 +716,7 @@
         infoPickupTitle: "📍 Самовивіз та доставка",
         infoPickupText: "• <b>Самовивіз:</b> проспект Руставелі, Тбілісі<br>• <b>Доставка:</b> Кур'єр Bolt / Yandex<br>• <b>Години роботи:</b> 10:00 – 20:00",
         infoPackTitle: "📦 Упаковка та коріння",
-        infoPackText: "Кожна рослина пакується з максимальною турботою. Ми вказуємо статус кореневої системи (Well-rooted, Fresh cutting, Corm)."
+        infoPackText: "Кожна рослина пакується з максимальною турботою. We provide clear root status markers."
       },
       ka: {
         tabCatalog: "🌱 კატალოგი",
@@ -711,6 +729,7 @@
         mature: "🪴 ზრდასრული",
         babies: "👶 პატარა",
         bulbs: "🪵 ბოლქვები",
+        newTipBtn: "✨ რჩევა",
         askPhoto: "ფოტოების მოთხოვნა",
         soldOut: "გაყიდულია",
         notifyMe: "შეტყობინება",
@@ -732,7 +751,7 @@
         infoPickupTitle: "📍 თვითგატანა და მიწოდება",
         infoPickupText: "• <b>თვითგატანა:</b> რუსთაველის გამზირი, თბილისი<br>• <b>მიწოდება:</b> კურიერი Bolt / Yandex<br>• <b>სამუშაო საათები:</b> 10:00 – 20:00",
         infoPackTitle: "📦 შეფუთვა და ფესვები",
-        infoPackText: "ყველა მცენარე შეფუთულია მაქსიმალური სიფრთხილით. ვუთითებთ ფესვთა სისტემის სტატუსს (Well-rooted, Fresh cutting, Corm)."
+        infoPackText: "ყველა მცენარე შეფუთულია მაქსიმალური სიფრთხილით."
       }
     };
 
@@ -752,6 +771,7 @@
       document.getElementById('btnMature').textContent = t.mature;
       document.getElementById('btnBaby').textContent = t.babies;
       document.getElementById('btnBulb').textContent = t.bulbs;
+      document.getElementById('btnNewTip').textContent = t.newTipBtn;
       document.getElementById('lblCartTitle').textContent = t.cartTitle;
       document.getElementById('btnClear').textContent = t.clearCart;
       document.getElementById('promoInput').placeholder = t.promoPlaceholder;
@@ -873,7 +893,7 @@
     function toggleFavorite(id, event) {
       event.stopPropagation();
       favorites[id] = !favorites[id];
-      showToast(favorites[id] ? "Added to favorites ⭐" : "Removed from favorites");
+      showToast(favorites[id] ? "Added to saved ⭐" : "Removed from saved");
       renderCatalog();
     }
 
@@ -990,7 +1010,7 @@
         card.innerHTML = `
           ${badgeHTML}
           ${soldBadgeHTML}
-          <button class="fav-btn ${isFav}" onclick="toggleFavorite(${p.id}, event)">❤️</button>
+          <button class="fav-btn ${isFav}" onclick="toggleFavorite(${p.id}, event)"><span>⭐</span></button>
           <img src="${p.img}" alt="${p.name}">
           <div class="title">${p.name}</div>
           <div class="desc">${p.desc}</div>
