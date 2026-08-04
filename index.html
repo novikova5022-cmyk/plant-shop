@@ -758,27 +758,44 @@
     <button class="btn" style="width:100%; margin-top:20px;" onclick="switchTab('catalog')" id="btnBack">← Back to Catalog</button>
   </div>
 
-  <!-- УСПЕХ -->
+  <!-- УСПЕХ И ИНСТРУКЦИЯ -->
   <div id="success-page" style="display: none;" class="success-screen">
-    <div class="success-icon">🌿✨</div>
-    <div class="success-title" id="lblSuccessTitle">Thank you for your order!</div>
-    <div class="success-text" id="lblSuccessText">Order successfully placed. Payment by bank transfer, cash, or USDT.</div>
-    
-    <div class="payment-card">
-      <b>💳 Bank Details (GEL / USD):</b><br>
-      IBAN: <code>GE00TB0000000000000000</code><br>
-      Beneficiary: <b>Botanika Tbilisi</b><br><br>
+    <div class="success-icon">🌱✨</div>
+    <div class="success-title" id="lblSuccessTitle">Order Created!</div>
+    <p class="success-text" id="lblSuccessText" style="margin-bottom: 15px;">
+      To confirm availability and arrange delivery, please confirm your order with our manager:
+    </p>
 
-      <b>🪙 Cryptocurrency (USDT):</b><br>
-      Network: TRC20 / TON<br>
-      Address: <code>TY1234567890BotanikaTbilisiUSDT</code><br><br>
-      
-      <b>📍 Pickup & Delivery:</b><br>
-      • Self-pickup: Rustaveli, Tbilisi<br>
-      • Courier: Bolt / Yandex
+    <!-- Главная кнопка действия -->
+    <div style="width: 100%; max-width: 320px; margin-bottom: 15px;">
+      <button id="btnSendOrderToManager" class="btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: #0088cc; padding: 12px; font-size: 13px; border-radius: 12px;">
+        💬 Confirm order with manager
+      </button>
     </div>
 
-    <button class="btn" style="width:100%; max-width: 250px;" onclick="tg.close()" id="btnClose">Close & Return to Bot</button>
+    <!-- Инструкция -->
+    <div class="payment-card" style="border-left: 4px solid var(--button-color); background: rgba(46,125,50,0.05);">
+      <b style="color: var(--button-color);">📌 Next Steps</b>
+      <ol style="margin: 8px 0 0 0; padding-left: 18px; font-size: 12px; line-height: 1.6;">
+        <li><b>Confirmation:</b> Click the button above to open a pre-filled chat with our manager.</li>
+        <li><b>Payment:</b> IBAN or USDT payment is made <i>after</i> availability is confirmed.</li>
+        <li><b>Delivery:</b> We will coordinate Bolt/Yandex delivery or Rustaveli pickup.</li>
+      </ol>
+    </div>
+    
+    <!-- Реквизиты -->
+    <div class="payment-card">
+      <b style="font-size: 13px;">💳 Payment Details:</b><br>
+      <div style="margin-top: 6px; font-size: 12px; line-height: 1.5;">
+        • <b>Bank Transfer (GEL):</b> <code>GE00TB0000000000000000</code> (TBC Bank)<br>
+        • <b>Beneficiary:</b> Botanika Tbilisi<br>
+        • <b>USDT (TRC20):</b> <code>TY1234567890BotanikaTbilisiUSDT</code>
+      </div>
+    </div>
+
+    <button class="btn" style="background: transparent; color: var(--hint-color); border: 1px solid #ddd; width: 100%; max-width: 320px;" onclick="tg.close()" id="btnCloseWindow">
+      Close Window
+    </button>
   </div>
 
   <div id="toast">Notification</div>
@@ -786,6 +803,9 @@
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
+
+    // 📌 УКАЖИТЕ ВАШ TELEGRAM USERNAME БЕЗ ЗНАКА @
+    const MANAGER_USERNAME = "jul_leo"; 
 
     if (tg.setHeaderColor) tg.setHeaderColor('secondary_bg_color');
     if (tg.setBackgroundColor) tg.setBackgroundColor('bg_color');
@@ -820,9 +840,10 @@
         promoPlaceholder: "Promo code...",
         apply: "Apply",
         back: "← Back to Catalog",
-        successTitle: "Thank you for your order!",
-        successText: "Order successfully placed. Payment by bank transfer, cash, or USDT.",
-        close: "Close & Return to Bot",
+        successTitle: "Order Created!",
+        successText: "To confirm availability and arrange delivery, please confirm your order with our manager:",
+        btnManager: "💬 Confirm order with manager",
+        closeWindow: "Close Window",
         emptyCart: "Your cart is empty",
         toastAdded: "Added",
         toastCleared: "Cart cleared",
@@ -873,9 +894,10 @@
         promoPlaceholder: "Промокод...",
         apply: "Применить",
         back: "← Назад в каталог",
-        successTitle: "Спасибо за заказ!",
-        successText: "Заказ успешно оформлен. Оплата переводом, наличными или USDT.",
-        close: "Закрыть и вернуться в бот",
+        successTitle: "Заказ успешно сформирован!",
+        successText: "Чтобы мы забронировали за вами растения и согласовали доставку, подтвердите заказ в один клик:",
+        btnManager: "💬 Подтвердить заказ у менеджера",
+        closeWindow: "Закрыть окно",
         emptyCart: "Корзина пуста",
         toastAdded: "Добавлено",
         toastCleared: "Корзина очищена",
@@ -926,9 +948,10 @@
         promoPlaceholder: "Промокод...",
         apply: "Застосувати",
         back: "← Назад до каталогу",
-        successTitle: "Дякуємо за замовлення!",
-        successText: "Замовлення успішно оформлено. Оплата переказом, готівкою або USDT.",
-        close: "Закрити та повернутися",
+        successTitle: "Замовлення сформовано!",
+        successText: "Підтвердіть замовлення у менеджера для бронювання рослин:",
+        btnManager: "💬 Підтвердити замовлення у менеджера",
+        closeWindow: "Закрити вікно",
         emptyCart: "Кошик порожній",
         toastAdded: "Додано",
         toastCleared: "Кошик очищено",
@@ -979,9 +1002,10 @@
         promoPlaceholder: "პრომოკოდი...",
         apply: "არჩევა",
         back: "← კატალოგში დაბრუნება",
-        successTitle: "მადლობა შეკვეთისთვის!",
-        successText: "შეკვეთა წარმატებით გაფორმდა.",
-        close: "დახურვა",
+        successTitle: "შეკვეთა გაფორმდა!",
+        successText: "დაადასტურეთ შეკვეთა მენეჯერთან:",
+        btnManager: "💬 შეკვეთის დადასტურება მენეჯერთან",
+        closeWindow: "ფანჯრის დახურვა",
         emptyCart: "კალათა ცარიელია",
         toastAdded: "დამატებულია",
         toastCleared: "კალათა გასუფთავდა",
@@ -1039,7 +1063,8 @@
       document.getElementById('btnBack').textContent = t.back;
       document.getElementById('lblSuccessTitle').textContent = t.successTitle;
       document.getElementById('lblSuccessText').textContent = t.successText;
-      document.getElementById('btnClose').textContent = t.close;
+      document.getElementById('btnSendOrderToManager').textContent = t.btnManager;
+      document.getElementById('btnCloseWindow').textContent = t.closeWindow;
       
       document.getElementById('infoTitleExpert').textContent = t.infoExpertTitle;
       document.getElementById('infoTextExpert').innerHTML = t.infoExpertText;
@@ -1234,22 +1259,14 @@
       updateMainButton();
     }
 
-    // Безопасная отправка запроса фото через sendData
     function askPhoto(plantName) {
-      tg.sendData(JSON.stringify({
-        action: 'ask_photo',
-        plant: plantName
-      }));
-      showToast("Request sent!");
+      const text = encodeURIComponent(`📸 Здравствуйте! Отправьте, пожалуйста, живое фото/видео растения: ${plantName}`);
+      tg.openTelegramLink(`https://t.me/${MANAGER_USERNAME}?text=${text}`);
     }
 
-    // Безопасная отправка запроса уведомления через sendData
     function notifyMe(productName) {
-      tg.sendData(JSON.stringify({
-        action: 'notify_me',
-        plant: productName
-      }));
-      showToast("Notification saved!");
+      const text = encodeURIComponent(`🔔 Здравствуйте! Сообщите, пожалуйста, когда в наличии появится: ${productName}`);
+      tg.openTelegramLink(`https://t.me/${MANAGER_USERNAME}?text=${text}`);
     }
 
     function setCategory(cat, btn) {
@@ -1443,13 +1460,13 @@
       }
     }
 
-    // Безопасное отправление заказа через Telegram SDK
     tg.MainButton.onClick(() => {
       if (currentView === 'catalog') {
         switchTab('cart'); 
       } else if (currentView === 'cart') {
         let purchasedPlantsCount = 0;
-        let itemsList = [];
+        let orderSummary = "🌿 Здравствуйте! Я хочу оформить заказ в Botanika Tbilisi:\n\n";
+        let totalPriceGEL = 0;
 
         Object.keys(cart).forEach(id => {
           const strId = String(id);
@@ -1458,20 +1475,20 @@
             if (!strId.startsWith('upsell_')) {
               purchasedPlantsCount += cart[strId];
             }
-            itemsList.push({
-              name: item.name,
-              price: item.price,
-              quantity: cart[strId]
-            });
+            orderSummary += `• ${item.name} — ${formatPrice(item.price)} x${cart[strId]}\n`;
+            totalPriceGEL += item.price * cart[strId];
           }
         });
 
-        // Отправка данных боту без раскрытия BOT_TOKEN
-        tg.sendData(JSON.stringify({
-          action: 'order',
-          items: itemsList,
-          currency: currencySelect.value
-        }));
+        orderSummary += `\n💰 Итого к оплате: ${formatPrice(totalPriceGEL)}`;
+
+        const encodedText = encodeURIComponent(orderSummary);
+        const managerLink = `https://t.me/${MANAGER_USERNAME}?text=${encodedText}`;
+        
+        const confirmBtn = document.getElementById('btnSendOrderToManager');
+        confirmBtn.onclick = () => {
+          tg.openTelegramLink(managerLink);
+        };
 
         userStats.ordersCount += 1;
         userStats.collectedPlants = Math.min(25, userStats.collectedPlants + purchasedPlantsCount);
