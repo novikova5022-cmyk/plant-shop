@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Botanika Tbilisi</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
@@ -20,7 +20,9 @@
       color: var(--text-color);
       margin: 0;
       padding: 10px;
+      padding-top: calc(env(safe-area-inset-top) + 10px);
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
     
     .top-bar {
@@ -40,7 +42,7 @@
     .nav-tabs::-webkit-scrollbar { display: none; }
     .tab-btn {
       flex: 1;
-      padding: 8px 8px;
+      padding: 8px 6px;
       background: var(--card-bg);
       border: 1px solid #e0e0e0;
       border-radius: 10px;
@@ -102,8 +104,7 @@
       white-space: nowrap;
     }
 
-    /* Кнопка "Удиви меня" для корзины */
-    .surpise-cart-btn {
+    .surprise-cart-btn {
       background: linear-gradient(135deg, #2e7d32, #1b5e20);
       color: #fff;
       border: none;
@@ -153,9 +154,10 @@
       display: flex;
       gap: 6px;
       overflow-x: auto;
-      padding-bottom: 4px;
+      padding-bottom: 6px;
       margin-bottom: 8px;
       scrollbar-width: none;
+      scroll-snap-type: x mandatory;
     }
     .filters::-webkit-scrollbar { display: none; }
     .filter-btn {
@@ -168,6 +170,7 @@
       font-weight: 500;
       cursor: pointer;
       white-space: nowrap;
+      scroll-snap-align: start;
     }
     .filter-btn.active {
       background: var(--button-color);
@@ -178,7 +181,6 @@
     .trust-ticker {
       background: rgba(0, 0, 0, 0.04);
       border: 1px solid rgba(0, 0, 0, 0.06);
-      backdrop-filter: blur(5px);
       border-radius: 10px;
       padding: 6px 10px;
       font-size: 11px;
@@ -230,12 +232,13 @@
       padding: 3px 6px;
       border-radius: 6px;
       text-transform: uppercase;
+      z-index: 1;
     }
 
     .sold-badge {
       position: absolute;
       top: 14px;
-      right: 14px;
+      right: 48px;
       background: rgba(0, 0, 0, 0.75);
       color: #fff;
       font-size: 9px;
@@ -243,6 +246,7 @@
       padding: 3px 6px;
       border-radius: 6px;
       text-transform: uppercase;
+      z-index: 1;
     }
 
     .fav-btn {
@@ -269,19 +273,27 @@
       font-size: 13px;
       font-weight: 700;
       margin: 6px 0 2px 0;
+      min-height: 32px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
     .desc {
       font-size: 11px;
       color: var(--hint-color);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       line-height: 1.2;
+      min-height: 26px;
     }
     
     .card-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px;
+      gap: 3px;
       margin-bottom: 6px;
+      min-height: 36px;
+      align-content: flex-start;
     }
     .meta-pill {
       font-size: 9px;
@@ -290,6 +302,7 @@
       border-radius: 4px;
       background: rgba(0,0,0,0.04);
       color: var(--text-color);
+      white-space: nowrap;
     }
     .meta-diff-easy { color: #2e7d32; background: rgba(46,125,50,0.08); }
     .meta-diff-med { color: #d84315; background: rgba(216,67,21,0.08); }
@@ -304,6 +317,9 @@
       border-radius: 4px;
       display: inline-block;
       margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .ask-photo-btn {
@@ -316,7 +332,7 @@
       color: var(--button-color);
       background: rgba(46,125,50,0.06);
       border: 1px dashed rgba(46,125,50,0.3);
-      padding: 4px 6px;
+      padding: 5px 6px;
       border-radius: 6px;
       cursor: pointer;
       margin-bottom: 6px;
@@ -329,6 +345,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 6px;
+      min-height: 20px;
     }
     .price {
       font-size: 14px;
@@ -345,7 +362,7 @@
       background: var(--button-color);
       color: var(--button-text);
       border: none;
-      padding: 7px;
+      padding: 8px;
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
@@ -397,7 +414,6 @@
       font-size: 15px;
     }
 
-    /* Блок Выбор Ники во вкладке Важное */
     .nika-choice-box {
       background: linear-gradient(135deg, rgba(46,125,50,0.1), rgba(46,125,50,0.02));
       border: 1.5px solid rgba(46,125,50,0.25);
@@ -412,7 +428,6 @@
       margin-bottom: 6px;
     }
 
-    /* Стили паспорта коллекционера */
     .passport-header {
       background: linear-gradient(135deg, #1b5e20, #2e7d32);
       color: #fff;
@@ -590,8 +605,8 @@
   <div class="top-bar">
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchTab('catalog')" id="tabCatalog">🌱 Catalog</button>
-      <button class="tab-btn" onclick="switchTab('info')" id="tabInfo">ℹ️ Важное</button>
-      <button class="tab-btn" onclick="switchTab('passport')" id="tabPassport">📖 Паспорт</button>
+      <button class="tab-btn" onclick="switchTab('info')" id="tabInfo">ℹ️ Info</button>
+      <button class="tab-btn" onclick="switchTab('passport')" id="tabPassport">📖 Passport</button>
     </div>
     <div class="settings-group">
       <select id="currencySelect" class="select-pill" onchange="renderCatalog()">
@@ -637,13 +652,12 @@
     <div class="grid" id="catalog"></div>
   </div>
 
-  <!-- ВАЖНОЕ (с блоком "Выбор Ники") -->
+  <!-- ВАЖНОЕ -->
   <div id="info-page" style="display: none;">
-    <!-- Блок Выбор Ники -->
     <div class="nika-choice-box">
-      <div class="nika-choice-title" id="nikaChoiceTitle">👑 Выбор Ники на эту неделю:</div>
+      <div class="nika-choice-title" id="nikaChoiceTitle">👑 Nika's Weekly Choice:</div>
       <p style="font-size: 12px; margin: 0; line-height: 1.4;" id="nikaChoiceDesc">
-        «Лично рекомендую <b>Alocasia Azlanii</b> и <b>Caladium Brandy</b> — идеальная корневая система, потрясающая текстура листьев и полностью адаптированы к условиям в Тбилиси!»
+        «I personally recommend <b>Alocasia Azlanii</b> and <b>Caladium Brandy</b> — pristine roots, stunning leaves, fully adapted for Tbilisi!»
       </p>
     </div>
 
@@ -651,9 +665,9 @@
       <h3 id="infoTitleExpert">👑 Why trust Botanika & Nika</h3>
       <p id="infoTextExpert">
         👋 Hi! I'm <b>Nika</b>. For years, I’ve been passionately collecting rare aroids. Botanika Tbilisi is built on uncompromising quality:<br><br>
-        ✅ <b>Manual check:</b> Every single plant is inspected by me personally before sending.<br>
-        📸 <b>Live photos:</b> We send you real photos/videos of your exact plant upon request.<br>
-        📦 <b>Safe packaging:</b> Professional insulation and root protection for Tbilisi delivery.<br>
+        ✅ <b>Manual check:</b> Every single plant is inspected by me personally.<br>
+        📸 <b>Live photos:</b> Real photos of your exact plant upon request.<br>
+        📦 <b>Safe packaging:</b> Professional insulation for Tbilisi.<br>
         ⭐ <b>500+ happy plant parents</b> in our community.
       </p>
     </div>
@@ -668,44 +682,43 @@
     </div>
   </div>
 
-  <!-- ЛИЧНЫЙ КАБИНЕТ / ПАСПОРТ КОЛЛЕКЦИОНЕРА -->
+  <!-- ПАСПОРТ -->
   <div id="passport-page" style="display: none;">
     <div class="passport-header">
-      <div class="passport-title" id="passUserName">🌿 Коллекционер Botanika</div>
-      <div class="passport-level" id="passUserLevel">Уровень: 🌱 Beginner Grower</div>
+      <div class="passport-title" id="passUserName">🌿 Botanika Collector</div>
+      <div class="passport-level" id="passUserLevel">Level: 🌱 Beginner Grower</div>
       <div class="passport-stats">
-        <div>📦 Заказов: <b id="statOrders">0</b></div>
-        <div>🌱 Редких видов: <b id="statPlants">0 / 25</b></div>
-        <div>💎 Статус: <b id="statStatus">Активен</b></div>
+        <div><span id="lblOrdersCount">Orders</span>: <b id="statOrders">0</b></div>
+        <div><span id="lblRareCount">Rare species</span>: <b id="statPlants">0 / 25</b></div>
+        <div><span id="lblStatus">Status</span>: <b id="statStatus">Active</b></div>
       </div>
     </div>
 
-    <h3 style="font-size: 14px; margin: 15px 0 8px 0;" id="passAchieveTitle">🏆 Достижения коллекционера</h3>
+    <h3 style="font-size: 14px; margin: 15px 0 8px 0;" id="passAchieveTitle">🏆 Collector Achievements</h3>
     <div class="achievements-grid">
-      <div class="achievement-item" id="ach1">🏆 Первый заказ</div>
-      <div class="achievement-item locked" id="ach2">🌿 Ароидный маньяк</div>
-      <div class="achievement-item locked" id="ach3">👑 Клуб редких</div>
-      <div class="achievement-item locked" id="ach4">📦 Постоянный клиент</div>
+      <div class="achievement-item" id="ach1">🏆 <span id="ach1Text">First Order</span></div>
+      <div class="achievement-item locked" id="ach2">🌿 <span id="ach2Text">Aroid Maniac</span></div>
+      <div class="achievement-item locked" id="ach3">👑 <span id="ach3Text">Rare Club</span></div>
+      <div class="achievement-item locked" id="ach4">📦 <span id="ach4Text">Regular Customer</span></div>
     </div>
 
     <div class="info-card">
-      <h3 id="passStampTitle">📖 Виртуальный паспорт марок</h3>
+      <h3 id="passStampTitle">📖 Virtual Stamp Passport</h3>
       <p style="font-size: 12px; color: var(--hint-color); margin: 0;" id="passStampDesc">
-        Каждый купленный редкий экземпляр оставляет цветную марку в вашем физическом паспорте Botanika, который вы получаете при заказе на Руставели!
+        Every rare specimen purchased leaves a colored stamp in your physical Botanika passport, which you receive with orders on Rustaveli!
       </p>
     </div>
   </div>
 
-  <!-- КОРЗИНА (с кнопкой "Удиви меня") -->
+  <!-- КОРЗИНА -->
   <div id="cart-page" style="display: none;">
     <div class="cart-header">
       <h1 id="lblCartTitle" style="font-size:18px; margin:0;">🛒 Your Cart</h1>
       <button class="clear-cart-btn" onclick="clearCart()" id="btnClear">Clear Cart</button>
     </div>
 
-    <!-- Кнопка Удиви меня в корзине -->
-    <button class="surpise-cart-btn" onclick="surpriseMe()">
-      🎲 <span id="btnSurpriseText">Удиви меня (случайный выбор)</span>
+    <button class="surprise-cart-btn" onclick="surpriseMe()">
+      🎲 <span id="btnSurpriseText">Surprise me (random choice)</span>
     </button>
 
     <div class="daily-card">
@@ -753,12 +766,12 @@
     
     <div class="payment-card">
       <b>💳 Bank Details (GEL / USD):</b><br>
-      IBAN: <code>[ YOUR IBAN ]</code><br>
-      Beneficiary: <b>[ YOUR NAME ]</b><br><br>
+      IBAN: <code>GE00TB0000000000000000</code><br>
+      Beneficiary: <b>Botanika Tbilisi</b><br><br>
 
       <b>🪙 Cryptocurrency (USDT):</b><br>
       Network: TRC20 / TON<br>
-      Address: <code>[ YOUR USDT WALLET ]</i><br><br>
+      Address: <code>TY1234567890BotanikaTbilisiUSDT</code><br><br>
       
       <b>📍 Pickup & Delivery:</b><br>
       • Self-pickup: Rustaveli, Tbilisi<br>
@@ -774,12 +787,15 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
+    if (tg.setHeaderColor) tg.setHeaderColor('secondary_bg_color');
+    if (tg.setBackgroundColor) tg.setBackgroundColor('bg_color');
+
     const EXCHANGE_RATE = 2.7;
 
     const translations = {
       en: {
         tabCatalog: "🌱 Catalog",
-        tabInfo: "ℹ️ Важное",
+        tabInfo: "ℹ️ Info",
         tabPassport: "📖 Passport",
         search: "Search plants...",
         all: "🌱 All",
@@ -797,7 +813,7 @@
         addToCart: "Add to cart",
         cartTitle: "🛒 Your Cart",
         clearCart: "Clear Cart",
-        surpriseBtn: "🎲 Surprise me (random plant)",
+        surpriseBtn: "🎲 Surprise me (random choice)",
         nikaTitle: "👑 Nika's Weekly Choice:",
         nikaDesc: "«I personally recommend <b>Alocasia Azlanii</b> and <b>Caladium Brandy</b> — pristine roots, stunning leaves, fully adapted for Tbilisi!»",
         upsellTitle: "💡 Frequently bought together:",
@@ -814,7 +830,21 @@
         infoExpertTitle: "👑 Why trust Botanika & Nika",
         infoExpertText: `👋 Hi! I'm <b>Nika</b>. For years, I’ve been passionately collecting rare aroids. Botanika Tbilisi is built on uncompromising quality:<br><br>✅ <b>Manual check:</b> Every single plant is inspected by me personally.<br>📸 <b>Live photos:</b> Real photos of your exact plant upon request.<br>📦 <b>Safe packaging:</b> Professional insulation for Tbilisi.<br>⭐ <b>500+ happy plant parents</b> in our community.`,
         infoPickupTitle: "📍 Pickup & Delivery",
-        infoPickupText: "• <b>Self-pickup:</b> Rustaveli Avenue, Tbilisi (by appointment).<br>• <b>Delivery:</b> Safe courier delivery across Tbilisi via Bolt / Yandex.<br>• <b>Working hours:</b> 10:00 – 20:00 daily."
+        infoPickupText: "• <b>Self-pickup:</b> Rustaveli Avenue, Tbilisi (by appointment).<br>• <b>Delivery:</b> Safe courier delivery across Tbilisi via Bolt / Yandex.<br>• <b>Working hours:</b> 10:00 – 20:00 daily.",
+        passLevelPrefix: "Level: ",
+        lblOrdersCount: "Orders",
+        lblRareCount: "Rare species",
+        lblStatus: "Status",
+        statStatusActive: "Active",
+        passAchieveTitle: "🏆 Collector Achievements",
+        ach1Text: "First Order",
+        ach2Text: "Aroid Maniac",
+        ach3Text: "Rare Club",
+        ach4Text: "Regular Customer",
+        passStampTitle: "📖 Virtual Stamp Passport",
+        passStampDesc: "Every rare specimen purchased leaves a colored stamp in your physical Botanika passport, which you receive with orders on Rustaveli!",
+        viewCart: "View Cart",
+        getPlants: "Get plants"
       },
       ru: {
         tabCatalog: "🌱 Каталог",
@@ -853,7 +883,21 @@
         infoExpertTitle: "👑 Почему доверяют Botanika и Нике",
         infoExpertText: `👋 Привет! Я <b>Ника</b>. Много лет я профессионально коллекционирую редкие ароидные. Botanika Tbilisi — это бескомпромиссное качество:<br><br>✅ <b>Личная проверка:</b> Каждое растение я проверяю лично перед отправкой.<br>📸 <b>Живые фото:</b> Отправляем фото именно вашего экземпляра по запросу.<br>📦 <b>Надежная упаковка:</b> Защита корней и листьев для доставки по Тбилиси.<br>⭐ <b>500+ довольных коллекционеров</b> в нашем сообществе.`,
         infoPickupTitle: "📍 Самовывоз и доставка",
-        infoPickupText: "• <b>Самовывоз:</b> пр. Руставели, Тбилиси (по предварительной договоренности).<br>• <b>Доставка:</b> Курьер Bolt / Yandex по Тбилиси.<br>• <b>Часы работы:</b> 10:00 – 20:00 ежедневно."
+        infoPickupText: "• <b>Самовывоз:</b> пр. Руставели, Тбилиси (по предварительной договоренности).<br>• <b>Доставка:</b> Курьер Bolt / Yandex по Тбилиси.<br>• <b>Часы работы:</b> 10:00 – 20:00 ежедневно.",
+        passLevelPrefix: "Уровень: ",
+        lblOrdersCount: "Заказов",
+        lblRareCount: "Редких видов",
+        lblStatus: "Статус",
+        statStatusActive: "Активен",
+        passAchieveTitle: "🏆 Достижения коллекционера",
+        ach1Text: "Первый заказ",
+        ach2Text: "Ароидный маньяк",
+        ach3Text: "Клуб редких",
+        ach4Text: "Постоянный клиент",
+        passStampTitle: "📖 Виртуальный паспорт марок",
+        passStampDesc: "Каждый купленный редкий экземпляр оставляет цветную марку в вашем физическом паспорте Botanika, который вы получаете при заказе на Руставели!",
+        viewCart: "Посмотреть корзину",
+        getPlants: "Оформить заказ"
       },
       uk: {
         tabCatalog: "🌱 Каталог",
@@ -869,7 +913,7 @@
         bulbs: "🪵 Бульби",
         newTipBtn: "✨ Порада",
         trustTicker: "<span>📍 Самовивіз Руставелі</span><span>•</span><span>📸 Живі фото</span><span>•</span><span>🛡️ Надійне пак.</span>",
-        askPhoto: "📸 Запросити живо фото",
+        askPhoto: "📸 Запросити живі фото",
         soldOut: "Продано",
         notifyMe: "Повідомити про появу",
         addToCart: "У кошик",
@@ -877,7 +921,7 @@
         clearCart: "Очистити",
         surpriseBtn: "🎲 Здивуй мене (випадковий вибір)",
         nikaTitle: "👑 Вибір Ніки на цей тиждень:",
-        nikaDesc: "«Особисто рекомендую <b>Alocasia Azlanii</b> та <b>Caladium Brandy</b>!»",
+        nikaDesc: "«Особисто рекомендую <b>Alocasia Azlanii</b> та <b>Caladium Brandy</b> — ідеальне коріння та чудова адаптація!»",
         upsellTitle: "💡 Часто купують разом:",
         promoPlaceholder: "Промокод...",
         apply: "Застосувати",
@@ -890,13 +934,27 @@
         toastCleared: "Кошик очищено",
         promoApplied: "Промокод застосовано!",
         infoExpertTitle: "👑 Чому довіряють Botanika та Ніці",
-        infoExpertText: `👋 Привіт! Я <b>Ніка</b>.`,
+        infoExpertText: `👋 Привіт! Я <b>Ніка</b>. Роками колекціоную рідкісні ароїдні. Botanika Tbilisi — це якість без компромісів!`,
         infoPickupTitle: "📍 Самовивіз та доставка",
-        infoPickupText: "• <b>Самовивіз:</b> проспект Руставелі, Тбілісі."
+        infoPickupText: "• <b>Самовивіз:</b> проспект Руставелі, Тбілісі.<br>• <b>Доставка:</b> Кур'єр Bolt / Yandex.<br>• <b>Працюємо:</b> 10:00 – 20:00.",
+        passLevelPrefix: "Рівень: ",
+        lblOrdersCount: "Замовлень",
+        lblRareCount: "Рідкісних видів",
+        lblStatus: "Статус",
+        statStatusActive: "Активний",
+        passAchieveTitle: "🏆 Досягнення колекціонера",
+        ach1Text: "Перше замовлення",
+        ach2Text: "Ароїдний маніяк",
+        ach3Text: "Клуб рідкісних",
+        ach4Text: "Постійний клієнт",
+        passStampTitle: "📖 Віртуальний паспорт марок",
+        passStampDesc: "Кожна куплена рідкісна рослина залишає кольорову марку у вашому паспорту Botanika!",
+        viewCart: "Переглянути кошик",
+        getPlants: "Оформити замовлення"
       },
       ka: {
         tabCatalog: "🌱 კატალოგი",
-        tabInfo: "ℹ️ მნიშვნელოვანი",
+        tabInfo: "ℹ️ ინფორმაცია",
         tabPassport: "📖 პასპორტი",
         search: "მცენარეების ძებნა...",
         all: "🌱 ყველა",
@@ -914,7 +972,7 @@
         addToCart: "კალათაში",
         cartTitle: "🛒 თქვენი კალათა",
         clearCart: "გასუფთავება",
-        surpriseBtn: "🎲 გა მაკვირვე (შემთხვევითი)",
+        surpriseBtn: "🎲 მომეხმარე არჩევაში",
         nikaTitle: "👑 ნიკას რეკომენდაცია:",
         nikaDesc: "«პირადად გირჩევთ <b>Alocasia Azlanii</b>-ს!»",
         upsellTitle: "💡 ხშირად ყიდულობენ ერთად:",
@@ -928,14 +986,30 @@
         toastAdded: "დამატებულია",
         toastCleared: "კალათა გასუფთავდა",
         promoApplied: "პრომოკოდი გააქტიურდა!",
-        infoExpertTitle: "👑 რატომ ენდობიან Botanika-ს და ნიკას",
+        infoExpertTitle: "👑 რატომ ენდობიან Botanika-ს",
         infoExpertText: `👋 გამარჯობა! მე ვარ <b>ნიკა</b>.`,
         infoPickupTitle: "📍 თვითგატანა და მიწოდება",
-        infoPickupText: "• <b>თვითგატანა:</b> რუსთაველის გამზირი, თბილისი."
+        infoPickupText: "• <b>თვითგატანა:</b> რუსთაველის გამზირი, თბილისი.",
+        passLevelPrefix: "დონე: ",
+        lblOrdersCount: "შეკვეთები",
+        lblRareCount: "იშვიათი სახეობა",
+        lblStatus: "სტატუსი",
+        statStatusActive: "აქტიური",
+        passAchieveTitle: "🏆 მიღწევები",
+        ach1Text: "პირველი შეკვეთა",
+        ach2Text: "არიოდების მოყვარული",
+        ach3Text: "იშვიათი კლუბი",
+        ach4Text: "მუდმივი კლიენტი",
+        passStampTitle: "📖 ვირტუალური პასპორტი",
+        passStampDesc: "ყოველ იშვიათ მცენარეზე იღებთ შტამპს თქვენს პასპორტში!",
+        viewCart: "კალათის ნახვა",
+        getPlants: "შეკვეთის გაფორმება"
       }
     };
 
-    let currentLang = 'en';
+    let userLangCode = tg.initDataUnsafe?.user?.language_code || 'en';
+    let currentLang = translations[userLangCode] ? userLangCode : 'en';
+    document.getElementById('langSelect').value = currentLang;
 
     function changeLanguage() {
       currentLang = document.getElementById('langSelect').value;
@@ -949,9 +1023,9 @@
       document.getElementById('btnFav').textContent = t.saved;
       document.getElementById('btnNew').textContent = t.new;
       document.getElementById('btnRare').textContent = t.rare;
-      document.getElementById('btnMature').textContent = t.mature;
-      document.getElementById('btnBaby').textContent = t.babies;
-      document.getElementById('btnBulb').textContent = t.bulbs;
+      if (document.getElementById('btnMature')) document.getElementById('btnMature').textContent = t.mature;
+      if (document.getElementById('btnBaby')) document.getElementById('btnBaby').textContent = t.babies;
+      if (document.getElementById('btnBulb')) document.getElementById('btnBulb').textContent = t.bulbs;
       document.getElementById('btnNewTip').textContent = t.newTipBtn;
       document.getElementById('trustTickerText').innerHTML = t.trustTicker;
       document.getElementById('lblCartTitle').textContent = t.cartTitle;
@@ -971,9 +1045,23 @@
       document.getElementById('infoTextExpert').innerHTML = t.infoExpertText;
       document.getElementById('infoTitlePickup').textContent = t.infoPickupTitle;
       document.getElementById('infoTextPickup').innerHTML = t.infoPickupText;
+
+      document.getElementById('lblOrdersCount').textContent = t.lblOrdersCount;
+      document.getElementById('lblRareCount').textContent = t.lblRareCount;
+      document.getElementById('lblStatus').textContent = t.lblStatus;
+      document.getElementById('statStatus').textContent = t.statStatusActive;
+      document.getElementById('passAchieveTitle').textContent = t.passAchieveTitle;
+      document.getElementById('ach1Text').textContent = t.ach1Text;
+      document.getElementById('ach2Text').textContent = t.ach2Text;
+      document.getElementById('ach3Text').textContent = t.ach3Text;
+      document.getElementById('ach4Text').textContent = t.ach4Text;
+      document.getElementById('passStampTitle').textContent = t.passStampTitle;
+      document.getElementById('passStampDesc').textContent = t.passStampDesc;
       
       renderCatalog();
       if (currentView === 'cart') renderCart();
+      if (currentView === 'passport') renderPassport();
+      updateMainButton();
     }
 
     const dailyTips = [
@@ -988,13 +1076,12 @@
       document.getElementById('dailyWidgetText').innerHTML = dailyTips[randomIndex];
     }
 
-    /* Функция "Удиви меня" — выбирает случайный товар и добавляет в корзину */
     function surpriseMe() {
       const availableProducts = products.filter(p => p.inStock && !(typeof p.id === 'string' && p.id.startsWith('upsell_')));
       if (availableProducts.length === 0) return;
       const randomPlant = availableProducts[Math.floor(Math.random() * availableProducts.length)];
       changeQty(randomPlant.id, 1);
-      showToast(`🎲 Сюрприз! Выпало: ${randomPlant.name}`);
+      showToast(`🎲 ${randomPlant.name}`);
     }
 
     const products = [
@@ -1030,7 +1117,6 @@
     let currentView = 'catalog';
     let currentCategory = 'All';
 
-    // Данные личного кабинета (хранятся в localStorage)
     let userStats = JSON.parse(localStorage.getItem('botanika_user_stats')) || {
       ordersCount: 0,
       collectedPlants: 0,
@@ -1098,8 +1184,9 @@
     }
 
     function renderPassport() {
+      const t = translations[currentLang];
       const user = tg.initDataUnsafe?.user;
-      const name = user ? (user.first_name + (user.last_name ? ' ' + user.last_name : '')) : "Коллекционер Botanika";
+      const name = user ? (user.first_name + (user.last_name ? ' ' + user.last_name : '')) : "Botanika Collector";
       document.getElementById('passUserName').textContent = `🌿 ${name}`;
       
       document.getElementById('statOrders').textContent = userStats.ordersCount;
@@ -1109,27 +1196,19 @@
       if (userStats.ordersCount >= 3) levelText = "🌿 Active Grower";
       if (userStats.ordersCount >= 5) levelText = "🪴 Aroid Collector";
       if (userStats.ordersCount >= 10) levelText = "👑 Expert Botanist";
-      document.getElementById('passUserLevel').textContent = `Уровень: ${levelText}`;
+      document.getElementById('passUserLevel').textContent = `${t.passLevelPrefix}${levelText}`;
 
-      // Ачивки
-      if (userStats.ordersCount > 0) {
-        document.getElementById('ach1').classList.remove('locked');
-      }
-      if (userStats.ordersCount >= 3) {
-        document.getElementById('ach2').classList.remove('locked');
-      }
-      if (userStats.collectedPlants >= 5) {
-        document.getElementById('ach3').classList.remove('locked');
-      }
-      if (userStats.ordersCount >= 5) {
-        document.getElementById('ach4').classList.remove('locked');
-      }
+      if (userStats.ordersCount > 0) document.getElementById('ach1').classList.remove('locked');
+      if (userStats.ordersCount >= 3) document.getElementById('ach2').classList.remove('locked');
+      if (userStats.collectedPlants >= 5) document.getElementById('ach3').classList.remove('locked');
+      if (userStats.ordersCount >= 5) document.getElementById('ach4').classList.remove('locked');
     }
 
     function toggleFavorite(id, event) {
       event.stopPropagation();
-      favorites[id] = !favorites[id];
-      showToast(favorites[id] ? "Added to saved ⭐" : "Removed from saved");
+      const strId = String(id);
+      favorites[strId] = !favorites[strId];
+      showToast(favorites[strId] ? "Added to saved ⭐" : "Removed from saved");
       renderCatalog();
     }
 
@@ -1142,49 +1221,34 @@
 
     function addUpsell(name, priceGEL) {
       const upsellId = 'upsell_' + name;
-      if (!cart[upsellId]) {
-        if (!products.some(p => p.id === upsellId)) {
-          products.push({ id: upsellId, name: name, price: priceGEL, inStock: true, desc: "Care accessory" });
+      const strId = String(upsellId);
+      if (!cart[strId]) {
+        if (!products.some(p => String(p.id) === strId)) {
+          products.push({ id: strId, name: name, price: priceGEL, inStock: true, desc: "Care accessory" });
         }
-        cart[upsellId] = 0;
+        cart[strId] = 0;
       }
-      cart[upsellId]++;
-      showToast(`Added ${name}`);
+      cart[strId]++;
+      showToast(`${translations[currentLang].toastAdded} ${name}`);
       renderCart();
       updateMainButton();
     }
 
+    // Безопасная отправка запроса фото через sendData
     function askPhoto(plantName) {
-      const user = tg.initDataUnsafe?.user;
-      const username = user && user.username ? `@${user.username}` : (user ? user.first_name : "User");
-      const BOT_TOKEN = "8824289991:AAHZ_9Zgh-TQQ6c4Vl9bK-WTwzQfuU9yxec"; 
-      const CHAT_ID = "113667741"; 
-
-      const text = `📸 <b>ЗАПРОС ФОТО!</b>\n\nПокупатель ${username} запрашивает фото для товара: <b>${plantName}</b>`;
-
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'HTML' })
-      }).catch(err => console.log(err));
-
+      tg.sendData(JSON.stringify({
+        action: 'ask_photo',
+        plant: plantName
+      }));
       showToast("Request sent!");
     }
 
+    // Безопасная отправка запроса уведомления через sendData
     function notifyMe(productName) {
-      const user = tg.initDataUnsafe?.user;
-      const username = user && user.username ? `@${user.username}` : (user ? user.first_name : "User");
-      const BOT_TOKEN = "8824289991:AAHZ_9Zgh-TQQ6c4Vl9bK-WTwzQfuU9yxec"; 
-      const CHAT_ID = "113667741"; 
-
-      const notifyText = `🔔 <b>ЗАПРОС УВЕДОМЛЕНИЯ!</b>\n\nПокупатель ${username} хочет уведомление о товаре: <b>${productName}</b>`;
-
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: CHAT_ID, text: notifyText, parse_mode: 'HTML' })
-      }).catch(err => console.log(err));
-
+      tg.sendData(JSON.stringify({
+        action: 'notify_me',
+        plant: productName
+      }));
       showToast("Notification saved!");
     }
 
@@ -1202,10 +1266,11 @@
       const t = translations[currentLang];
 
       let filtered = products.filter(p => {
-        if (typeof p.id === 'string' && p.id.startsWith('upsell_')) return false;
+        const strId = String(p.id);
+        if (strId.startsWith('upsell_')) return false;
         let matchesCategory = true;
         if (currentCategory === 'Favorites') {
-          matchesCategory = favorites[p.id];
+          matchesCategory = favorites[strId];
         } else if (currentCategory === 'New') {
           matchesCategory = (p.badge === 'New');
         } else if (currentCategory === 'Rare') {
@@ -1232,27 +1297,28 @@
       }
 
       filtered.forEach(p => {
+        const strId = String(p.id);
         const card = document.createElement('div');
         card.className = 'card';
         
         let actionHTML = '';
         let badgeHTML = p.badge ? `<div class="badge">${p.badge}</div>` : '';
         let soldBadgeHTML = '';
-        const isFav = favorites[p.id] ? 'active' : '';
+        const isFav = favorites[strId] ? 'active' : '';
 
         if (!p.inStock) {
           soldBadgeHTML = `<div class="sold-badge">${t.soldOut}</div>`;
           actionHTML = `<button class="btn btn-sold" onclick="notifyMe('${p.name}')">${t.notifyMe}</button>`;
         } else {
-          const qty = cart[p.id] || 0;
+          const qty = cart[strId] || 0;
           if (qty === 0) {
-            actionHTML = `<button class="btn" onclick="changeQty(${p.id}, 1)">${t.addToCart}</button>`;
+            actionHTML = `<button class="btn" onclick="changeQty('${strId}', 1)">${t.addToCart}</button>`;
           } else {
             actionHTML = `
               <div class="qty-control">
-                <button class="qty-btn" onclick="changeQty(${p.id}, -1)">-</button>
+                <button class="qty-btn" onclick="changeQty('${strId}', -1)">-</button>
                 <span class="qty-num">${qty}</span>
-                <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+                <button class="qty-btn" onclick="changeQty('${strId}', 1)">+</button>
               </div>
             `;
           }
@@ -1269,7 +1335,7 @@
         card.innerHTML = `
           ${badgeHTML}
           ${soldBadgeHTML}
-          <button class="fav-btn ${isFav}" onclick="toggleFavorite(${p.id}, event)"><span>⭐</span></button>
+          <button class="fav-btn ${isFav}" onclick="toggleFavorite('${strId}', event)"><span>⭐</span></button>
           <img src="${p.img}" alt="${p.name}">
           <div class="title">${p.name}</div>
           <div class="desc">${p.desc}</div>
@@ -1284,20 +1350,22 @@
         `;
         catalogDiv.appendChild(card);
       });
+      updateMainButton();
     }
 
     function changeQty(id, delta) {
-      if (!cart[id]) cart[id] = 0;
-      cart[id] += delta;
+      const strId = String(id);
+      if (!cart[strId]) cart[strId] = 0;
+      cart[strId] += delta;
       
       const t = translations[currentLang];
-      const item = products.find(p => p.id == id);
+      const item = products.find(p => String(p.id) === strId);
       if (delta > 0 && item) {
         showToast(`${t.toastAdded} ${item.name}`);
       }
 
-      if (cart[id] <= 0) {
-        delete cart[id];
+      if (cart[strId] <= 0) {
+        delete cart[strId];
       }
       renderCatalog();
       if (currentView === 'cart') renderCart();
@@ -1324,9 +1392,10 @@
       }
 
       keys.forEach(id => {
-        const item = products.find(p => p.id == id);
+        const strId = String(id);
+        const item = products.find(p => String(p.id) === strId);
         if (!item) return;
-        const qty = cart[id];
+        const qty = cart[strId];
         const div = document.createElement('div');
         div.className = 'cart-item';
         div.innerHTML = `
@@ -1336,9 +1405,9 @@
           </div>
           <div class="cart-item-actions">
             <div class="qty-control" style="width: 90px;">
-              <button class="qty-btn" onclick="changeQty('${item.id}', -1)">-</button>
+              <button class="qty-btn" onclick="changeQty('${strId}', -1)">-</button>
               <span class="qty-num">${qty}</span>
-              <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+              <button class="qty-btn" onclick="changeQty('${strId}', 1)">+</button>
             </div>
           </div>
         `;
@@ -1349,19 +1418,22 @@
     function updateMainButton() {
       let totalCount = 0;
       let totalPriceGEL = 0;
+      const t = translations[currentLang];
+
       Object.keys(cart).forEach(id => {
-        totalCount += cart[id];
-        const item = products.find(p => p.id == id);
-        if (item) totalPriceGEL += item.price * cart[id];
+        const strId = String(id);
+        totalCount += cart[strId];
+        const item = products.find(p => String(p.id) === strId);
+        if (item) totalPriceGEL += item.price * cart[strId];
       });
 
       if (totalCount > 0) {
         const formattedTotal = formatPrice(totalPriceGEL);
         if (currentView === 'catalog') {
-          tg.MainButton.setText(`View Cart (${formattedTotal})`);
+          tg.MainButton.setText(`${t.viewCart} (${formattedTotal})`);
           tg.MainButton.show();
         } else if (currentView === 'cart') {
-          tg.MainButton.setText(`Get plants • ${formattedTotal}`);
+          tg.MainButton.setText(`${t.getPlants} · ${formattedTotal}`);
           tg.MainButton.show();
         } else {
           tg.MainButton.hide();
@@ -1371,52 +1443,36 @@
       }
     }
 
+    // Безопасное отправление заказа через Telegram SDK
     tg.MainButton.onClick(() => {
       if (currentView === 'catalog') {
         switchTab('cart'); 
       } else if (currentView === 'cart') {
-        let orderText = "🪴 <b>НОВЫЙ ЗАКАЗ!</b>\n\n";
         let purchasedPlantsCount = 0;
-        
+        let itemsList = [];
+
         Object.keys(cart).forEach(id => {
-          const item = products.find(p => p.id == id);
-          if (item && !String(id).startsWith('upsell_')) {
-            purchasedPlantsCount += cart[id];
-          }
+          const strId = String(id);
+          const item = products.find(p => String(p.id) === strId);
           if (item) {
-            orderText += `• ${item.name} — ${formatPrice(item.price)} × ${cart[id]} = ${formatPrice(item.price * cart[id])}\n`;
+            if (!strId.startsWith('upsell_')) {
+              purchasedPlantsCount += cart[strId];
+            }
+            itemsList.push({
+              name: item.name,
+              price: item.price,
+              quantity: cart[strId]
+            });
           }
         });
 
-        let totalGEL = 0;
-        Object.keys(cart).forEach(id => {
-          const item = products.find(p => p.id == id);
-          if (item) totalGEL += item.price * cart[id];
-        });
-        orderText += `\n💰 <b>Итого: ${formatPrice(totalGEL)}</b>\n\n`;
+        // Отправка данных боту без раскрытия BOT_TOKEN
+        tg.sendData(JSON.stringify({
+          action: 'order',
+          items: itemsList,
+          currency: currencySelect.value
+        }));
 
-        const user = tg.initDataUnsafe?.user;
-        if (user) {
-          const username = user.username ? `@${user.username}` : user.first_name;
-          orderText += `👤 <b>Покупатель:</b> ${username}\n`;
-        }
-        
-        orderText += `\n💳 <i>Оплата: Банк / USDT</i>\n🚚 <i>Доставка: Самовывоз (Руставели) / Курьер</i>`;
-
-        const BOT_TOKEN = "8824289991:AAHZ_9Zgh-TQQ6c4Vl9bK-WTwzQfuU9yxec"; 
-        const CHAT_ID = "113667741"; 
-
-        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: CHAT_ID,
-            text: orderText,
-            parse_mode: 'HTML'
-          })
-        }).catch(err => console.log(err));
-
-        // Обновляем статистику личного кабинета (паспорта)
         userStats.ordersCount += 1;
         userStats.collectedPlants = Math.min(25, userStats.collectedPlants + purchasedPlantsCount);
         localStorage.setItem('botanika_user_stats', JSON.stringify(userStats));
@@ -1432,7 +1488,7 @@
       }
     });
 
-    renderCatalog();
+    changeLanguage();
   </script>
 </body>
 </html>
